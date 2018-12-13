@@ -1,0 +1,4 @@
+SetEnv DB_HOST host.appletrh.ovh
+SetEnv DB_USER xyz
+SetEnv DB_PASSWORD 12345
+SetEnv DB_NAME qa_xyz
