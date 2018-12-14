@@ -23,9 +23,7 @@ class Database
                 throw new \Exception("Connection to database failed :(");
             }
         } catch (\Exception $e){
-//            throw new \Exception($e->getMessage());
-            die('error');
-
+            throw new \Exception($e->getMessage());
         }
     }
 }
