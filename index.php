@@ -6,11 +6,12 @@
  * Time: 10:18 AM
  */
 
+namespace QAClasses;
+
 include_once "vendor/autoload.php";
 
-$postClass = new \QAClasses\Post();
+$postClass = new Post();
 $posts = $postClass->getAllPosts();
-//$post = $postClass->getPostById(1);
-//var_dump($posts);
+
 
 return new Template('home', ['posts' => $posts]);

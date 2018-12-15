@@ -6,14 +6,13 @@
  * Time: 10:26 AM
  */
 
+namespace QAClasses;
 
 class Template
 {
     public function __construct($fileName, $parameters = null) {
-        $loader = new Twig_Loader_Filesystem('templates');
-        $twig = new Twig_Environment($loader, array(
-            'cache' => 'Cache'
-        ));
+        $loader = new \Twig_Loader_Filesystem('templates');
+        $twig = new \Twig_Environment($loader, []);
 
         $template = $twig->load("$fileName.twig");
 
