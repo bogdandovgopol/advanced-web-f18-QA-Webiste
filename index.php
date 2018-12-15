@@ -13,4 +13,4 @@ $posts = $postClass->getAllPosts();
 //$post = $postClass->getPostById(1);
 //var_dump($posts);
 
-echo json_encode($posts);
+return new Template('home', ['posts' => $posts]);
