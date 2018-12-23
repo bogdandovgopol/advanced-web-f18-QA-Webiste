@@ -14,7 +14,7 @@ use App\Repository\PostRepository;
 include "vendor/autoload.php";
 
 
-$postClass = new PostRepository();
-$posts = $postClass->getAllPosts();
+$postRepository = new PostRepository();
+$posts = $postRepository->getAllPosts();
 
 return new Template('home', ['posts' => $posts]);

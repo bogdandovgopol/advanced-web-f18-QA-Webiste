@@ -17,6 +17,6 @@ $slug = $_GET['slug'];
 
 
 $postRepository = new PostRepository();
-$post = $postClass->getPostBySlug($slug);
+$post = $postRepository->getPostBySlug($slug);
 
 return new Template('detail', ['post' => $post]);
