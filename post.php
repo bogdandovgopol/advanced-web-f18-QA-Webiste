@@ -15,6 +15,7 @@ include "vendor/autoload.php";
 
 $slug = $_GET['slug'];
 
+
 $postClass = new PostRepository();
 $post = $postClass->getPostBySlug($slug);
 

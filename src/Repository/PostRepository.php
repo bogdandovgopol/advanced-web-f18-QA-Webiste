@@ -53,7 +53,7 @@ class PostRepository extends Database
 
                 $tags = $this->tagClass->getTagsByPostId($row['id']);
 
-                $post->set($row['id'], $row['title'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
+                $post->set($row['id'], $row['title'], $row['slug'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
 
                 $posts[] = $post;
             }
@@ -91,11 +91,9 @@ class PostRepository extends Database
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
 
-                $post = new Post();
-
                 $tags = $this->tagClass->getTagsByPostId($row['id']);
 
-                $post->set($row['id'], $row['title'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
+                $post->set($row['id'], $row['title'], $row['slug'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
             }
         }
 
@@ -119,23 +117,25 @@ class PostRepository extends Database
               post
             WHERE
               post.slug = ? 
-            LIMIT 1
+            
         ";
 
         $statement = $this->connection->prepare($query);
         $statement->bind_param('s', $slug);
         $statement->execute();
 
+
         $result = $statement->get_result();
+        die(var_dump($result->num_rows));
 
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
 
-                $post = new Post();
+                die(var_dump($row));
 
                 $tags = $this->tagClass->getTagsByPostId($row['id']);
 
-                $post->set($row['id'], $row['title'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
+                $post->set($row['id'], $row['title'], $row['slug'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
             }
         }
 
@@ -179,7 +179,7 @@ class PostRepository extends Database
 
                 $tags = $this->tagClass->getTagsByPostId($row['id']);
 
-                $post->set($row['id'], $row['title'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
+                $post->set($row['id'], $row['title'], $row['slug'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
 
                 $posts[] = $post;
             }

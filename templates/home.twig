@@ -7,7 +7,7 @@
 
     {% for post in posts %}
         <div class="col-md-12">
-            <h2><a href="detail.php?slug={{ post.slug }}">{{ post.title }}</a></h2>
+            <h2><a href="post.php?slug={{ post.slug }}">{{ post.title }}</a></h2>
             Tags:
             {% for tag in post.tags %}
                 {{ tag.name }},

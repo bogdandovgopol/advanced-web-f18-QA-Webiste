@@ -126,12 +126,11 @@ class Post
 
     #### CUSTOM ####
 
-    public function set(int $id, string $title, string $body, array $tags, \DateTime $createdAt, \DateTime $updatedAt): void
+    public function set(int $id, string $title, string $slug, string $body, array $tags, \DateTime $createdAt, \DateTime $updatedAt): void
     {
         $this->id = $id;
         $this->title = $title;
-        //generate sug from title
-        $this->setSlug($title);
+        $this->slug = $slug;
         $this->body = $body;
         if (!empty($tags)) {
             foreach ($tags as $tag) {
