@@ -16,7 +16,7 @@ include "vendor/autoload.php";
 $slug = $_GET['slug'];
 
 
-$postClass = new PostRepository();
+$postRepository = new PostRepository();
 $post = $postClass->getPostBySlug($slug);
 
 return new Template('detail', ['post' => $post]);

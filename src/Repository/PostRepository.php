@@ -188,4 +188,55 @@ class PostRepository extends Database
 
         return $posts;
     }
+
+
+    /**
+     * @return Post[]
+     */
+    public function search(string $string): array
+    {
+
+        $string = "%$string%";
+        $posts = [];
+
+        $query = "
+            SELECT 
+              post.id,
+              post.title,
+              post.slug,
+              post.body,
+              post.created_at,
+              post.updated_at
+            FROM 
+              post 
+            LEFT JOIN posts_tags ON post.id = posts_tags.post_id
+            LEFT JOIN tag ON posts_tags.tag_id = tag.id
+            WHERE 
+              post.title LIKE ?
+              OR 
+              tag.name LIKE ?
+              
+        ";
+
+        $statement = $this->connection->prepare($query);
+        $statement->bind_param('ss', $string, $string);
+        $statement->execute();
+
+        $result = $statement->get_result();
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+
+                $post = new Post();
+
+                $tags = $this->tagClass->getTagsByPostId($row['id']);
+
+                $post->set($row['id'], $row['title'], $row['slug'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
+
+                $posts[] = $post;
+            }
+        }
+
+        return $posts;
+    }
 }
