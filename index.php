@@ -6,12 +6,15 @@
  * Time: 10:18 AM
  */
 
-namespace QAClasses;
+namespace App;
 
-include_once "vendor/autoload.php";
+use App\Helper\Template;
+use App\Repository\PostRepository;
 
-$postClass = new Post();
+include "vendor/autoload.php";
+
+
+$postClass = new PostRepository();
 $posts = $postClass->getAllPosts();
-
 
 return new Template('home', ['posts' => $posts]);

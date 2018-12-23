@@ -6,10 +6,12 @@
  * Time: 10:41 AM
  */
 
-namespace QAClasses;
+namespace App\Repository;
 
+use App\Entity\Tag;
+use App\Helper\Database;
 
-class Tag extends Database
+class TagRepository extends Database
 {
 
     public function __construct()
@@ -17,7 +19,11 @@ class Tag extends Database
         parent::__construct();
     }
 
-    public function getAllTags(){
+    /**
+     * @return Tag[]
+     */
+    public function getAllTags(): array
+    {
 
         $tags = [];
 
@@ -34,18 +40,23 @@ class Tag extends Database
 
         $result = $statement->get_result();
 
-        if($result->num_rows > 0){
-            while($row = $result->fetch_assoc()){
-                array_push($tags, $row);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+
+                $tag = new Tag();
+                $tag->set($row['id'], $row['name']);
+
+                $tags[] = $tag;
             }
         }
 
         return $tags;
     }
 
-    public function getTagById($id){
+    public function getTagById($id)
+    {
 
-        $tags = [];
+        $tag = new Tag();
 
         $query = "
             SELECT 
@@ -55,6 +66,7 @@ class Tag extends Database
               tag 
             WHERE
               tag.id = ? 
+            LIMIT 1
         ";
 
         $statement = $this->connection->prepare($query);
@@ -63,16 +75,20 @@ class Tag extends Database
 
         $result = $statement->get_result();
 
-        if($result->num_rows > 0){
-            while($row = $result->fetch_assoc()){
-                array_push($tags, $row);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $tag->set($row['id'], $row['name']);
             }
         }
 
-        return $tags;
+        return $tag;
     }
 
-    public function getTagsByPostId($postId){
+    /**
+     * @return Tag[]
+     */
+    public function getTagsByPostId($postId)
+    {
 
         $tags = [];
 
@@ -94,9 +110,13 @@ class Tag extends Database
 
         $result = $statement->get_result();
 
-        if($result->num_rows > 0){
-            while($row = $result->fetch_assoc()){
-                array_push($tags, $row);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+
+                $tag = new Tag();
+                $tag->set($row['id'], $row['name']);
+
+                $tags[] = $tag;
             }
         }
 

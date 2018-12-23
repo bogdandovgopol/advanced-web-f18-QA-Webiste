@@ -6,7 +6,7 @@
  * Time: 10:35 AM
  */
 
-namespace QAClasses;
+namespace App\Helper;
 
 class Database
 {
@@ -14,16 +14,16 @@ class Database
 
     protected function __construct()
     {
-        try{
+        try {
             $conn = mysqli_connect("localhost", "root", "", "qa_xyz");
 //            $conn = mysqli_connect(getenv("DB_HOST"), getenv("DB_USER"), getenv("DB_PASSWORD"), getenv("DB_NAME"));
 
-            if($conn){
+            if ($conn) {
                 $this->connection = $conn;
-            } else{
+            } else {
                 throw new \Exception("Connection to database failed :(");
             }
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
     }
