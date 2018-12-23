@@ -102,6 +102,46 @@ class PostRepository extends Database
         return $post;
     }
 
+    public function getPostBySlug(string $slug): Post
+    {
+
+        $post = new Post();
+
+        $query = "
+            SELECT 
+              post.id,
+              post.title, 
+              post.slug, 
+              post.body,
+              post.created_at,
+              post.updated_at
+            FROM 
+              post
+            WHERE
+              post.slug = ? 
+            LIMIT 1
+        ";
+
+        $statement = $this->connection->prepare($query);
+        $statement->bind_param('s', $slug);
+        $statement->execute();
+
+        $result = $statement->get_result();
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+
+                $post = new Post();
+
+                $tags = $this->tagClass->getTagsByPostId($row['id']);
+
+                $post->set($row['id'], $row['title'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
+            }
+        }
+
+        return $post;
+    }
+
     /**
      * @return Post[]
      */
