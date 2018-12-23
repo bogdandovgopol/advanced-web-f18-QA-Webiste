@@ -62,10 +62,10 @@ class PostRepository extends Database
         return $posts;
     }
 
-    public function getPostById(int $id): Post
+    public function getPostById(int $id): ?Post
     {
 
-        $post = new Post();
+        $post = null;
 
         $query = "
             SELECT 
@@ -91,6 +91,8 @@ class PostRepository extends Database
         if ($result->num_rows > 0) {
 
             while ($row = $result->fetch_assoc()) {
+                $post = new Post();
+
                 $tags = $this->tagClass->getTagsByPostId($row['id']);
 
                 $post->set($row['id'], $row['title'], $row['slug'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
@@ -101,10 +103,10 @@ class PostRepository extends Database
         return $post;
     }
 
-    public function getPostBySlug(string $slug): Post
+    public function getPostBySlug(string $slug): ?Post
     {
 
-        $post = new Post();
+        $post = null;
 
         $query = "
             SELECT 
@@ -133,6 +135,8 @@ class PostRepository extends Database
         if ($result->num_rows > 0) {
 
             while ($row = $result->fetch_assoc()) {
+                $post = new Post();
+
                 $tags = $this->tagClass->getTagsByPostId($row['id']);
 
                 $post->set($row['id'], $row['title'], $row['slug'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));

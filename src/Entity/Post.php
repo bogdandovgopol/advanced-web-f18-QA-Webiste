@@ -127,7 +127,7 @@ class Post
     #### CUSTOM ####
 
     //this method is used only to populate entity with existing data from the database.
-    public function set(int $id, string $title, string $slug, string $body, array $tags, \DateTime $createdAt, \DateTime $updatedAt): void
+    public function set(int $id, string $title, string $slug, string $body, ?array $tags, \DateTime $createdAt, \DateTime $updatedAt): void
     {
         $this->id = $id;
         $this->title = $title;

@@ -10,7 +10,7 @@ namespace App\Helper;
 
 class Template
 {
-    public function __construct($fileName, $parameters = null)
+    public function __construct(string $fileName, array $parameters = null)
     {
         $loader = new \Twig_Loader_Filesystem('templates');
         $twig = new \Twig_Environment($loader, []);
