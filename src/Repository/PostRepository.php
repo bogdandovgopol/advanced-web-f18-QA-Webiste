@@ -89,12 +89,13 @@ class PostRepository extends Database
         $result = $statement->get_result();
 
         if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
 
+            while ($row = $result->fetch_assoc()) {
                 $tags = $this->tagClass->getTagsByPostId($row['id']);
 
                 $post->set($row['id'], $row['title'], $row['slug'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
             }
+
         }
 
         return $post;
@@ -117,6 +118,7 @@ class PostRepository extends Database
               post
             WHERE
               post.slug = ? 
+            LIMIT 1
             
         ";
 
@@ -126,17 +128,16 @@ class PostRepository extends Database
 
 
         $result = $statement->get_result();
-        die(var_dump($result->num_rows));
+
 
         if ($result->num_rows > 0) {
+
             while ($row = $result->fetch_assoc()) {
-
-                die(var_dump($row));
-
                 $tags = $this->tagClass->getTagsByPostId($row['id']);
 
                 $post->set($row['id'], $row['title'], $row['slug'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
             }
+
         }
 
         return $post;

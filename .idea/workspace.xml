@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3afdcd37-c654-4415-81ff-30c0405f096d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/post.php" beforeDir="false" afterPath="$PROJECT_DIR$/post.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Post.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Post.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Repository/PostRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/PostRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/home.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.twig" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -46,9 +42,9 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JSON" value="49" />
-          <entry key="PHP" value="4127" />
+          <entry key="PHP" value="4232" />
           <entry key="PLAIN_TEXT" value="48" />
-          <entry key="SQL" value="14" />
+          <entry key="SQL" value="15" />
           <entry key="Twig" value="1245" />
           <entry key="htaccess" value="54" />
         </counts>
@@ -70,8 +66,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Repository/PostRepository.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="239">
-              <caret line="55" column="67" selection-start-line="55" selection-start-column="67" selection-end-line="55" selection-end-column="67" />
+            <state relative-caret-position="956">
+              <caret line="98" column="9" selection-start-line="98" selection-start-column="9" selection-end-line="98" selection-end-column="9" />
               <folding>
                 <element signature="e#126#146#0#PHP" expanded="true" />
               </folding>
@@ -321,12 +317,12 @@
       <workItem from="1544843853746" duration="1915000" />
       <workItem from="1544846064235" duration="1502000" />
       <workItem from="1544847942530" duration="12653000" />
-      <workItem from="1545523746778" duration="2492000" />
+      <workItem from="1545523746778" duration="2891000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26552000" />
+    <option name="totallyTimeSpent" value="26951000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1177" extended-state="0" />
@@ -509,8 +505,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Repository/PostRepository.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="55" column="67" selection-start-line="55" selection-start-column="67" selection-end-line="55" selection-end-column="67" />
+        <state relative-caret-position="956">
+          <caret line="98" column="9" selection-start-line="98" selection-start-column="9" selection-end-line="98" selection-end-column="9" />
           <folding>
             <element signature="e#126#146#0#PHP" expanded="true" />
           </folding>
