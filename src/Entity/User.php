@@ -19,6 +19,7 @@ class User
     private $isAdmin;
     private $isActive;
     private $lastIp;
+    private $createdAt;
 
     private $posts;
 
@@ -102,6 +103,16 @@ class User
         return $this->lastIp;
     }
 
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
     public function addPost(Post $post): void
     {
         $this->posts[] = $post;
@@ -122,16 +133,6 @@ class User
     public function getPosts(): ?array
     {
         return $this->posts;
-    }
-
-    #### CUSTOM ####
-
-    public function set(int $id, string $fullName, string $email, string $password): void
-    {
-        $this->id = $id;
-        $this->fullName = $fullName;
-        $this->email = $email;
-        $this->setPassword($password);
     }
 
 }

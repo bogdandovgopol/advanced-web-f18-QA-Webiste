@@ -10,6 +10,7 @@ namespace App\Repository;
 
 
 use App\Entity\Post;
+use App\Entity\User;
 use App\Helper\Database;
 
 class PostRepository extends Database
@@ -37,9 +38,15 @@ class PostRepository extends Database
               post.slug, 
               post.body,
               post.created_at,
-              post.updated_at
+              post.updated_at,
+              users.full_name,
+              users.email,
+              users.admin,
+              users.active,
+              users.created_at AS user_created_at
             FROM 
               post 
+            LEFT JOIN users ON post.user_id = users.id
         ";
 
         $statement = $this->connection->prepare($query);
@@ -51,9 +58,29 @@ class PostRepository extends Database
             while ($row = $result->fetch_assoc()) {
                 $post = new Post();
 
-                $tags = $this->tagClass->getTagsByPostId($row['id']);
+                $post->setId($row['id']);
+                $post->setTitle($row['title']);
+                $post->setSlug($row['slug']);
+                $post->setBody($row['body']);
+                $post->setCreatedAt(new \DateTime($row['created_at']));
+                $post->setCreatedAt(new \DateTime($row['updated_at']));
 
-                $post->set($row['id'], $row['title'], $row['slug'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
+                //populate tags esnity
+                $tags = $this->tagClass->getTagsByPostId($row['id']);
+                foreach ($tags as $tag) {
+                    $post->addTag($tag);
+                }
+
+                //populate users entity
+                $user = new User();
+
+                $user->setFullName($row['full_name']);
+                $user->setEmail($row['email']);
+                $user->setIsAdmin($row['admin']);
+                $user->setIsActive($row['active']);
+                $user->setCreatedAt(new \DateTime($row['user_created_at']));
+
+                $post->setUser($user);
 
                 $posts[] = $post;
             }
@@ -74,9 +101,15 @@ class PostRepository extends Database
               post.slug, 
               post.body,
               post.created_at,
-              post.updated_at
+              post.updated_at,
+              users.full_name,
+              users.email,
+              users.admin,
+              users.active,
+              users.created_at AS user_created_at
             FROM 
               post
+            LEFT JOIN users ON post.user_id = users.id
             WHERE
               post.id = ? 
             LIMIT 1
@@ -93,9 +126,31 @@ class PostRepository extends Database
             while ($row = $result->fetch_assoc()) {
                 $post = new Post();
 
-                $tags = $this->tagClass->getTagsByPostId($row['id']);
+                $post->setId($row['id']);
+                $post->setTitle($row['title']);
+                $post->setSlug($row['slug']);
+                $post->setBody($row['body']);
+                $post->setCreatedAt(new \DateTime($row['created_at']));
+                $post->setCreatedAt(new \DateTime($row['updated_at']));
 
-                $post->set($row['id'], $row['title'], $row['slug'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
+                //populate tags esnity
+                $tags = $this->tagClass->getTagsByPostId($row['id']);
+                foreach ($tags as $tag) {
+                    $post->addTag($tag);
+                }
+
+                //populate users entity
+                $user = new User();
+
+                $user->setFullName($row['full_name']);
+                $user->setEmail($row['email']);
+                $user->setIsAdmin($row['admin']);
+                $user->setIsActive($row['active']);
+                $user->setCreatedAt(new \DateTime($row['user_created_at']));
+
+                $post->setUser($user);
+
+                $posts[] = $post;
             }
 
         }
@@ -115,9 +170,15 @@ class PostRepository extends Database
               post.slug, 
               post.body,
               post.created_at,
-              post.updated_at
+              post.updated_at,
+              users.full_name,
+              users.email,
+              users.admin,
+              users.active,
+              users.created_at AS user_created_at
             FROM 
               post
+            LEFT JOIN users ON post.user_id = users.id
             WHERE
               post.slug = ? 
             LIMIT 1
@@ -137,9 +198,29 @@ class PostRepository extends Database
             while ($row = $result->fetch_assoc()) {
                 $post = new Post();
 
-                $tags = $this->tagClass->getTagsByPostId($row['id']);
+                $post->setId($row['id']);
+                $post->setTitle($row['title']);
+                $post->setSlug($row['slug']);
+                $post->setBody($row['body']);
+                $post->setCreatedAt(new \DateTime($row['created_at']));
+                $post->setCreatedAt(new \DateTime($row['updated_at']));
 
-                $post->set($row['id'], $row['title'], $row['slug'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
+                //populate tags esnity
+                $tags = $this->tagClass->getTagsByPostId($row['id']);
+                foreach ($tags as $tag) {
+                    $post->addTag($tag);
+                }
+
+                //populate users entity
+                $user = new User();
+
+                $user->setFullName($row['full_name']);
+                $user->setEmail($row['email']);
+                $user->setIsAdmin($row['admin']);
+                $user->setIsActive($row['active']);
+                $user->setCreatedAt(new \DateTime($row['user_created_at']));
+
+                $post->setUser($user);
             }
 
         }
@@ -162,11 +243,17 @@ class PostRepository extends Database
               post.slug,
               post.body,
               post.created_at,
-              post.updated_at
+              post.updated_at,
+              users.full_name,
+              users.email,
+              users.admin,
+              users.active,
+              users.created_at AS user_created_at
             FROM 
               post 
             LEFT JOIN posts_tags ON post.id = posts_tags.post_id
             LEFT JOIN tag ON posts_tags.tag_id = tag.id
+            LEFT JOIN users ON post.user_id = users.id
             WHERE 
               tag.id = ?
         ";
@@ -182,9 +269,29 @@ class PostRepository extends Database
 
                 $post = new Post();
 
-                $tags = $this->tagClass->getTagsByPostId($row['id']);
+                $post->setId($row['id']);
+                $post->setTitle($row['title']);
+                $post->setSlug($row['slug']);
+                $post->setBody($row['body']);
+                $post->setCreatedAt(new \DateTime($row['created_at']));
+                $post->setCreatedAt(new \DateTime($row['updated_at']));
 
-                $post->set($row['id'], $row['title'], $row['slug'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
+                //populate tags esnity
+                $tags = $this->tagClass->getTagsByPostId($row['id']);
+                foreach ($tags as $tag) {
+                    $post->addTag($tag);
+                }
+
+                //populate users entity
+                $user = new User();
+
+                $user->setFullName($row['full_name']);
+                $user->setEmail($row['email']);
+                $user->setIsAdmin($row['admin']);
+                $user->setIsActive($row['active']);
+                $user->setCreatedAt(new \DateTime($row['user_created_at']));
+
+                $post->setUser($user);
 
                 $posts[] = $post;
             }
@@ -197,7 +304,7 @@ class PostRepository extends Database
     /**
      * @return Post[]
      */
-    public function search(string $string): array
+    public function search(?string $string): array
     {
 
         $string = "%$string%";
@@ -210,11 +317,17 @@ class PostRepository extends Database
               post.slug,
               post.body,
               post.created_at,
-              post.updated_at
+              post.updated_at,
+              users.full_name,
+              users.email,
+              users.admin,
+              users.active,
+              users.created_at AS user_created_at
             FROM 
               post 
             LEFT JOIN posts_tags ON post.id = posts_tags.post_id
             LEFT JOIN tag ON posts_tags.tag_id = tag.id
+            LEFT JOIN users ON post.user_id = users.id
             WHERE 
               post.title LIKE ?
               OR 
@@ -233,9 +346,29 @@ class PostRepository extends Database
 
                 $post = new Post();
 
-                $tags = $this->tagClass->getTagsByPostId($row['id']);
+                $post->setId($row['id']);
+                $post->setTitle($row['title']);
+                $post->setSlug($row['slug']);
+                $post->setBody($row['body']);
+                $post->setCreatedAt(new \DateTime($row['created_at']));
+                $post->setCreatedAt(new \DateTime($row['updated_at']));
 
-                $post->set($row['id'], $row['title'], $row['slug'], $row['body'], $tags, new \DateTime($row['created_at']), new \DateTime($row['updated_at']));
+                //populate tags esnity
+                $tags = $this->tagClass->getTagsByPostId($row['id']);
+                foreach ($tags as $tag) {
+                    $post->addTag($tag);
+                }
+
+                //populate users entity
+                $user = new User();
+
+                $user->setFullName($row['full_name']);
+                $user->setEmail($row['email']);
+                $user->setIsAdmin($row['admin']);
+                $user->setIsActive($row['active']);
+                $user->setCreatedAt(new \DateTime($row['user_created_at']));
+
+                $post->setUser($user);
 
                 $posts[] = $post;
             }

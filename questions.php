@@ -17,4 +17,4 @@ include "vendor/autoload.php";
 $postRepository = new PostRepository();
 $posts = $postRepository->getAllPosts();
 
-return new Template('home', ['posts' => $posts]);
+return new Template('questions', ['posts' => $posts]);

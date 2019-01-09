@@ -50,13 +50,4 @@ class Tag
         $this->name = $name;
     }
 
-
-    #### CUSTOM ####
-
-    public function set(int $id, string $name): void
-    {
-        $this->id = $id;
-        $this->name = $name;
-    }
-
 }

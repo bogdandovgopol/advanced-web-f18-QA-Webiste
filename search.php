@@ -14,18 +14,16 @@ use App\Repository\PostRepository;
 
 include "vendor/autoload.php";
 
-if (isset($_GET['slug'])) {
-    $slug = $_GET['slug'];
+if (isset($_GET['query'])) {
+    $query = $_GET['query'];
+
 } else {
-    return new NotFoundHttpException("Not found something here");
+    return new NotFoundHttpException();
 }
 
 
-
 $postRepository = new PostRepository();
-$post = $postRepository->getPostBySlug($slug);
+$posts = $postRepository->search($query);
 
-if($post == null)
-    return new NotFoundHttpException();
 
-return new Template('detail', ['post' => $post]);
+return new Template('search', ['posts' => $posts, 'query' => $query]);

@@ -44,7 +44,8 @@ class TagRepository extends Database
             while ($row = $result->fetch_assoc()) {
 
                 $tag = new Tag();
-                $tag->set($row['id'], $row['name']);
+                $tag->setId($row['id']);
+                $tag->setName($row['name']);
 
                 $tags[] = $tag;
             }
@@ -77,7 +78,8 @@ class TagRepository extends Database
 
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $tag->set($row['id'], $row['name']);
+                $tag->setId($row['id']);
+                $tag->setName($row['name']);
             }
         }
 
@@ -114,7 +116,8 @@ class TagRepository extends Database
             while ($row = $result->fetch_assoc()) {
 
                 $tag = new Tag();
-                $tag->set($row['id'], $row['name']);
+                $tag->setId($row['id']);
+                $tag->setName($row['name']);
 
                 $tags[] = $tag;
             }

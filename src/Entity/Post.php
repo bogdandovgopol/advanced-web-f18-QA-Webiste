@@ -56,7 +56,7 @@ class Post
     public function setSlug(string $slug): void
     {
         //slugify string. example: Adobe Photoshop => adobe-photoshop
-        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $slug)));
+//        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $slug)));
 
         $this->slug = $slug;
     }
@@ -122,23 +122,5 @@ class Post
     public function getUser()
     {
         return $this->user;
-    }
-
-    #### CUSTOM ####
-
-    //this method is used only to populate entity with existing data from the database.
-    public function set(int $id, string $title, string $slug, string $body, ?array $tags, \DateTime $createdAt, \DateTime $updatedAt): void
-    {
-        $this->id = $id;
-        $this->title = $title;
-        $this->slug = $slug;
-        $this->body = $body;
-        if (!empty($tags)) {
-            foreach ($tags as $tag) {
-                $this->addTag($tag);
-            }
-        }
-        $this->createdAt = $createdAt;
-        $this->updatedAt = $updatedAt;
     }
 }
