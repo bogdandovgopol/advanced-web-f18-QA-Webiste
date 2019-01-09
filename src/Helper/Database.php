@@ -15,8 +15,8 @@ class Database
     protected function __construct()
     {
         try {
-            $conn = mysqli_connect("localhost", "root", "", "qa_xyz");
-//            $conn = mysqli_connect(getenv("DB_HOST"), getenv("DB_USER"), getenv("DB_PASSWORD"), getenv("DB_NAME"));
+//            $conn = mysqli_connect("localhost", "root", "", "qa_xyz");
+            $conn = mysqli_connect(getenv("DB_HOST"), getenv("DB_USER"), getenv("DB_PASSWORD"), getenv("DB_NAME"));
 
             if ($conn) {
                 $this->connection = $conn;
