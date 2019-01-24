@@ -21,4 +21,6 @@ $posts = $postRepository->getAllPosts();
 
 $users = $userRepository->getUsers();
 
+var_dump($users);
+
 return new Template('home', ['posts' => $posts, 'users' => $users]);
