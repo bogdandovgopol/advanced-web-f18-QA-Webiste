@@ -10,11 +10,15 @@ namespace App;
 
 use App\Helper\Template;
 use App\Repository\PostRepository;
+use App\Repository\UserRepository;
 
 include "vendor/autoload.php";
 
 
 $postRepository = new PostRepository();
+$userRepository  = new UserRepository();
 $posts = $postRepository->getAllPosts();
 
-return new Template('home', ['posts' => $posts]);
+$users = $userRepository->getUsers();
+
+return new Template('home', ['posts' => $posts, 'users' => $users]);

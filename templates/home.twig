@@ -19,4 +19,10 @@
         </div>
     {% endfor %}
 
+    USERS:
+
+    {% for user in users %}
+        {{ user.email }}
+    {% endfor %}
+
 {% endblock %}
