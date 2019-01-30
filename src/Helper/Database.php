@@ -1,30 +1,50 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: 6472
- * Date: 11/12/2018
- * Time: 10:35 AM
+ * User: bogdandovgopol
+ * Date: 2019-01-30
+ * Time: 19:04
  */
 
 namespace App\Helper;
 
+
+use App\Helper\Exception\ServerInternalErrorHttpException;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
+
 class Database
 {
-    protected $connection;
+    protected $entityManager;
 
-    protected function __construct()
+    public function __construct()
     {
-        try {
-//            $conn = mysqli_connect("localhost", "root", "", "qa_xyz");
-            $conn = mysqli_connect(getenv("DB_HOST"), getenv("DB_USER"), getenv("DB_PASSWORD"), getenv("DB_NAME"));
+        // Create a simple "default" Doctrine ORM configuration for Annotations
+        $isDevMode = true;
+        $config = Setup::createAnnotationMetadataConfiguration(array('src'), $isDevMode, null, null, false);
 
-            if ($conn) {
-                $this->connection = $conn;
-            } else {
-                throw new \Exception("Connection to database failed :(");
-            }
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+        // database configuration parameters
+        $conn = array(
+            'driver' => 'pdo_mysql',
+            'host' => 'host.appletrh.ovh',
+            'dbname' => 'qa_xyz',
+            'user' => 'xyz',
+            'password' => '12345',
+        );
+
+        try {
+            // obtaining the entity manager
+            $this->entityManager = EntityManager::create($conn, $config);
+        } catch (\Exception $exception) {
+            return new ServerInternalErrorHttpException($exception->getMessage());
         }
+    }
+
+    /**
+     * @return EntityManager
+     */
+    public function getEntityManager(): EntityManager
+    {
+        return $this->entityManager;
     }
 }

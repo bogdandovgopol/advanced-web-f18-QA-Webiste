@@ -9,42 +9,50 @@
 namespace App\Entity;
 
 
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\TagRepository")
+ * @ORM\Table(name="tags")
+ */
 class Tag
 {
+
+    /**
+     * @var integer
+     *
+     * @ORM\Id()
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue()
+     */
     private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
     private $name;
 
 
     #### GETTERS AND SETTERS ####
 
-    /**
-     * @return mixed
-     */
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param mixed $id
-     */
     public function setId(int $id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * @return mixed
-     */
     public function getName(): ?string
     {
         //slugify string. example: Adobe Photoshop => adobe-photoshop
-        return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $this->name)));
+        return $this->name;
     }
 
-    /**
-     * @param mixed $name
-     */
     public function setName(string $name): void
     {
         $this->name = $name;

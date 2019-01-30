@@ -8,53 +8,43 @@
 
 namespace App\Repository;
 
-
 use App\Entity\User;
-use App\Helper\Database;
+use Doctrine\ORM\EntityRepository;
 
-class UserRepository extends Database
+class UserRepository extends EntityRepository
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
 
     /**
-     * @return User[]
+     * @return null|User
      */
-    public function getUsers(): array
+    public function getUserById(?string $id): ?User
     {
-        $users = [];
+        $queryBuilder = $this->createQueryBuilder('u');
+        $queryBuilder->where('u.id = :id');
+        $queryBuilder->setParameters(['id' => $id]);
 
-        $query = "
-            SELECT 
-              *
-            FROM 
-              users
-        ";
-
-        $statement = $this->connection->prepare($query);
-        $statement->execute();
-
-        $result = $statement->get_result();
-
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $user = new User();
-
-                $user->setId($row['id']);
-                $user->setFullName($row['full_name']);
-                $user->setEmail('emmail');
-                $user->setIsActive(true);
-                $user->setIsAdmin(false);
-                $user->setPassword('password');
-
-                $users[] = $user;
-            }
+        try {
+            return $queryBuilder->getQuery()->getSingleResult();
+        } catch (\Exception $exception) {
+            return null;
         }
 
-        return $users;
     }
 
+    /**
+     * @return bool|User
+     */
+    public function getUserByEmail(?string $email)
+    {
+        $queryBuilder = $this->createQueryBuilder('u');
+        $queryBuilder->where('u.email = :email');
+        $queryBuilder->setParameters(['email' => $email]);
+
+        try {
+            return $queryBuilder->getQuery()->getSingleResult();
+        } catch (\Exception $exception) {
+            return false;
+        }
+
+    }
 }

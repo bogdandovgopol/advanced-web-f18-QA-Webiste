@@ -8,53 +8,128 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Table(name="users")
+ */
 class User
 {
+    /**
+     *
+     * @ORM\Id()
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="guid")
+     *
+     */
     private $id;
-    private $fullName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     *
+     */
+    private $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     *
+     */
+    private $lastName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", unique=true)
+     */
     private $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
     private $password;
-    private $hash;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
     private $isAdmin;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
     private $isActive;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
     private $lastIp;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
     private $createdAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Post", mappedBy="user")
+     */
     private $posts;
 
     public function __construct()
     {
+        $this->posts = new ArrayCollection();
+        $this->createdAt = new \DateTime();
+
         $this->lastIp = isset($_SERVER['HTTP_CLIENT_IP']) ? $_SERVER['HTTP_CLIENT_IP'] : isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
         $this->hash = uniqid();
-        $this->isActive = false;
+        $this->isActive = true;
         $this->isAdmin = false;
 
     }
 
     #### GETTERS AND SETTERS ####
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
 
-    public function setId(int $id): void
+    public function getFirstName(): string
     {
-        $this->id = $id;
+        return $this->firstName;
     }
 
-    public function getFullName(): ?string
+    public function setFirstName(string $firstName): void
     {
-        return $this->fullName;
+        $this->firstName = $firstName;
     }
 
-    public function setFullName(string $fullName): void
+    public function getLastName(): string
     {
-        $this->fullName = $fullName;
+        return $this->lastName;
     }
 
-    public function getEmail(): ?string
+    public function setLastName(string $lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -64,21 +139,18 @@ class User
         $this->email = $email;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
-//        password_verify('gz711bsk96xi', $password)
 
         return $this->password;
     }
 
     public function setPassword(string $password): void
     {
-        $password = password_hash($password, PASSWORD_DEFAULT);
-
         $this->password = $password;
     }
 
-    public function getIsAdmin(): ?bool
+    public function getIsAdmin(): bool
     {
         return $this->isAdmin;
     }
@@ -88,7 +160,7 @@ class User
         $this->isAdmin = $isAdmin;
     }
 
-    public function getisActive(): ?bool
+    public function getIsActive(): bool
     {
         return $this->isActive;
     }
@@ -98,12 +170,12 @@ class User
         $this->isActive = $isActive;
     }
 
-    public function getLastIp(): ?string
+    public function getLastIp(): string
     {
         return $this->lastIp;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
@@ -113,24 +185,10 @@ class User
         $this->createdAt = $createdAt;
     }
 
-    public function addPost(Post $post): void
-    {
-        $this->posts[] = $post;
-    }
-
-    public function removePost(Post $post)
-    {
-        $key = array_search($post, $this->posts, true);
-        if ($key === false) {
-            return false;
-        }
-
-        unset($this->posts[$key]);
-
-        return true;
-    }
-
-    public function getPosts(): ?array
+    /**
+     * @return Collection|Post[]
+     */
+    public function getPosts(): Collection
     {
         return $this->posts;
     }

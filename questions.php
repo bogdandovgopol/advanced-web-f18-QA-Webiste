@@ -8,13 +8,16 @@
 
 namespace App;
 
+use App\Entity\Post;
+use App\Helper\Database;
 use App\Helper\Template;
-use App\Repository\PostRepository;
 
 include "vendor/autoload.php";
 
 
-$postRepository = new PostRepository();
-$posts = $postRepository->getAllPosts();
+$entityManager = (new Database())->getEntityManager();
 
-return new Template('questions', ['posts' => $posts]);
+//get all posts
+$posts = $entityManager->getRepository(Post::class)->findAll();
+
+return new Template('home', ['posts' => $posts]);

@@ -8,12 +8,14 @@
 
 namespace App;
 
+use App\Entity\Post;
+use App\Helper\Database;
 use App\Helper\Exception\NotFoundHttpException;
 use App\Helper\Template;
-use App\Repository\PostRepository;
 
 include "vendor/autoload.php";
 
+//check if query is not empty if it is return 404 page
 if (isset($_GET['query'])) {
     $query = $_GET['query'];
 
@@ -22,8 +24,11 @@ if (isset($_GET['query'])) {
 }
 
 
-$postRepository = new PostRepository();
-$posts = $postRepository->search($query);
+//access entitymanager
+$entityManager = (new Database())->getEntityManager();
+
+//try to find post
+$posts = $entityManager->getRepository(Post::class)->findBySearchQuery($query);
 
 
 return new Template('search', ['posts' => $posts, 'query' => $query]);

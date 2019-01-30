@@ -8,34 +8,131 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
+ * @ORM\Table(name="posts")
+ * @ORM\HasLifecycleCallbacks()
+ */
 class Post
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Id()
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue()
+     */
     private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
     private $title;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
     private $slug;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text")
+     */
     private $body;
-    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
+    private $publishedAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
     private $updatedAt;
 
+    /**
+     * @var Comment[]|ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *      targetEntity="Comment",
+     *      mappedBy="post",
+     *      orphanRemoval=true,
+     *      cascade={"persist"}
+     * )
+     * @ORM\OrderBy({"publishedAt": "DESC"})
+     */
+    private $comments;
+
+    /**
+     * @var Tag[]|ArrayCollection
+     *
+     * Many Users have Many Groups.
+     * @ORM\ManyToMany(targetEntity="Tag", cascade={"persist"})
+     * @ORM\JoinTable(name="posts_tags",
+     *      joinColumns={@ORM\JoinColumn(name="post_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
+     *      )
+     */
     private $tags;
-    private $user;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="posts")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
 
     public function __construct()
     {
-        $this->tags = [];
+        $this->tags = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+
+    }
+
+    /**
+     * This function is called every time a record is inserted into database
+     *
+     * @ORM\PrePersist()
+     */
+    public function perPersist()
+    {
+        $this->publishedAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+
+        //slugify string. example: Adobe Photoshop => adobe-photoshop
+        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $this->getTitle())));
+        $this->setSlug($slug);
+    }
+
+    /**
+     * This function is called every time a record is updated
+     *
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime();
     }
 
     #### GETTERS AND SETTERS ####
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): void
-    {
-        $this->id = $id;
     }
 
     public function getTitle(): ?string
@@ -55,9 +152,6 @@ class Post
 
     public function setSlug(string $slug): void
     {
-        //slugify string. example: Adobe Photoshop => adobe-photoshop
-//        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $slug)));
-
         $this->slug = $slug;
     }
 
@@ -72,14 +166,14 @@ class Post
         $this->body = $body;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getPublishedAt(): ?\DateTime
     {
-        return $this->createdAt;
+        return $this->publishedAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): void
+    public function setPublishedAt(\DateTime $publishedAt): void
     {
-        $this->createdAt = $createdAt;
+        $this->publishedAt = $publishedAt;
     }
 
     public function getUpdatedAt(): ?\DateTime
@@ -92,35 +186,55 @@ class Post
         $this->updatedAt = $updatedAt;
     }
 
-    public function addTag(Tag $tag)
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): void
+    {
+        $comment->setPost($this);
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+        }
+    }
+
+    public function removeComment(Comment $comment): void
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    public function addTag(?Tag $tag): self
     {
         $this->tags[] = $tag;
+
+        return $this;
     }
 
-    public function removeTag(Tag $tag)
+    public function removeTag(Tag $tag): self
     {
-        $key = array_search($tag, $this->tags, true);
-        if ($key === false) {
-            return false;
-        }
+        $this->tags->removeElement($tag);
 
-        unset($this->tags[$key]);
-
-        return true;
+        return $this;
     }
 
-    public function getTags(): ?array
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): ?Collection
     {
         return $this->tags;
     }
 
-    public function setUser(User $user): void
+    public function getAuthor(): ?User
     {
-        $this->user = $user;
+        return $this->author;
     }
 
-    public function getUser()
+    public function setAuthor(?User $author): self
     {
-        return $this->user;
+        $this->author = $author;
+
+        return $this;
     }
 }

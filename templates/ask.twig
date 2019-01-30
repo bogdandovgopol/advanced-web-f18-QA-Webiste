@@ -1,0 +1,69 @@
+{% extends 'base.twig' %}
+
+{% block title %}Ask a question{% endblock %}
+{% block description %}Ask a question{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <form method="post" action="ask.php" id="sign-up" class="col-md-4 offset-md-4" novalidate>
+                <h3 class="text-center my-4">Ask a question</h3>
+                <div class="form-group">
+                    <label for="username">Title</label>
+
+                    {#{% if response.user %}#}
+                    {#{% set email = response.emmail %}#}
+                    {#{% endif %}#}
+
+                    <input type="text" name="title" class="form-control" id="title" placeholder="title" required value="{{ username }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Text</label>
+
+                    {#{% if response.user %}#}
+                    {#{% set content = response.content %}#}
+                    {#{% endif %}#}
+
+                    <textarea id="content" name="content" class="form-control">{{ content }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="tags">Tags</label>
+
+                    {#{% if response.user %}#}
+                    {#{% set content = response.content %}#}
+                    {#{% endif %}#}
+
+                    <select multiple name="tags[]" id="tags" class="form-control" data-live-search="true" data-size="5">
+                        {% for tag in tags %}
+                            <option value="{{ tag.id }}">{{ tag.name }}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+
+
+                {% if response.error %}
+                    <div class="feeback text-danger">
+                        {{ response.error }}<br/>
+                    </div>
+                {% endif %}
+
+                <div class="my-2 text-center">
+                    <button class="btn btn-primary" type="submit">Submit a question</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script>
+        $(function() {
+            $('#tags').selectpicker();
+        });
+    </script>
+{% endblock %}

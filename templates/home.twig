@@ -5,6 +5,8 @@
 
 {% block body %}
 
+    ACTIVE USER: {{ user.email }}
+
     {% for post in posts %}
         <div class="col-md-12">
             <h2><a href="post.php?slug={{ post.slug }}">{{ post.title }}</a></h2>
@@ -15,14 +17,14 @@
             <br/>
             <br/>
             <br/>
-            Created by: {{ post.user.fullName }}
+            {#Created by: {{ post.user.fullName }}#}
         </div>
     {% endfor %}
 
-    USERS:
+    {#USERS:#}
 
-    {% for user in users %}
-        {{ user.email }}
-    {% endfor %}
+    {#{% for user in users %}#}
+        {#{{ user.email }}#}
+    {#{% endfor %}#}
 
 {% endblock %}

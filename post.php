@@ -8,12 +8,14 @@
 
 namespace App;
 
+use App\Entity\Post;
+use App\Helper\Database;
 use App\Helper\Exception\NotFoundHttpException;
 use App\Helper\Template;
-use App\Repository\PostRepository;
 
 include "vendor/autoload.php";
 
+//check if slug is empty, if yes return 404 page
 if (isset($_GET['slug'])) {
     $slug = $_GET['slug'];
 } else {
@@ -21,11 +23,14 @@ if (isset($_GET['slug'])) {
 }
 
 
+//access entitymanager
+$entityManager = (new Database())->getEntityManager();
 
-$postRepository = new PostRepository();
-$post = $postRepository->getPostBySlug($slug);
+//try to find post
+$post = $entityManager->getRepository(Post::class)->findOneBy(['slug' => $slug]);
 
-if($post == null)
+//check if something has been found if not throw 404 page
+if (!$post)
     return new NotFoundHttpException();
 
 return new Template('detail', ['post' => $post]);
