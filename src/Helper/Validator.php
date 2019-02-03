@@ -14,6 +14,7 @@ class Validator
     public static function name($name)
     {
         $errors = [];
+        $name = strip_tags($name);
         if (false === $name || (empty($name) && '0' != $name)) {
             array_push($errors, 'Cannot be empty');
         }
@@ -97,5 +98,27 @@ class Validator
         }
         return $result;
 
+    }
+
+    public static function comment($comment)
+    {
+        $errors = [];
+        $name = strip_tags($comment);
+        if (false === $name || (empty($name) && '0' != $name)) {
+            array_push($errors, 'Cannot be empty');
+        }
+
+        if (strlen($name) < 20) {
+            array_push($errors, 'Cannot shorter than 20 characters');
+        }
+
+        $result = [];
+        if (count($errors) > 0) {
+            $result['success'] = false;
+            $result['errors'] = $errors;
+        } else {
+            $result['success'] = true;
+        }
+        return $result;
     }
 }

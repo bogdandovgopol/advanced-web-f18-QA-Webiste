@@ -92,7 +92,7 @@
         {% if user %}
             <form method="post" class="">
                 <div class="form-group">
-                    <textarea id="textarea" class="form-control" name="comment"></textarea>
+                    <textarea id="textarea" class="form-control" name="comment" minlength="20"></textarea>
                     {% if response.errors.comment %}
                         <div class="feedback text-danger">
                             {% for err in response.errors.comment %}

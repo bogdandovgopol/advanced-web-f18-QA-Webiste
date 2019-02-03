@@ -80,8 +80,8 @@ function leaveComment(Post $post, User $user)
     //define errors array
     $errors = [];
 
-    //validate first name
-    $validComment = Validator::name($comment);
+    //validate comment
+    $validComment = Validator::comment($comment);
     if ($validComment['success'] == false) {
         $errors['comment'] = $validComment['errors'];
     }
