@@ -15,7 +15,9 @@ use App\Managers\UserManager;
 include "vendor/autoload.php";
 
 if (UserManager::getActiveUser()) {
-    //destroy session
+    //destroy session => logout
     SessionManager::destroy();
+
+    //redirect to previous page
     header('Location: ' . $_SERVER['HTTP_REFERER']);
 }

@@ -23,10 +23,10 @@ if (isset($_GET['name'])) {
 }
 
 
-//access entitymanager
+//access doctrine's entity manager
 $entityManager = (new Database())->getEntityManager();
 
-//try to find post
+//try to find post by tag name
 $posts = $entityManager->getRepository(Post::class)->getPostsByTagName($name);
 
 //check if something has been found if not throw 404 page

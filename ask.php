@@ -25,7 +25,7 @@ if ($activeUser == null) {
     header("location:/signin.php");
 }
 
-//access entitymanager
+//access doctrine's entity manager
 $entityManager = (new Database())->getEntityManager();
 
 //repositories
@@ -35,12 +35,15 @@ $tagRepository = $entityManager->getRepository(Tag::class);
 //get all tags
 $tags = $tagRepository->findAll();
 
+//check if POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     //get data from submitted form
     $title = $_POST['title'];
     $body = $_POST['content'];
     $selectedTags = $_POST['tags'];
+
+    //pushing data into database
     insertPost($title, $body, $selectedTags, $entityManager, $tagRepository, $userRepository);
 
 }
@@ -72,12 +75,14 @@ function insertPost($title, $body, $selectedTags, \Doctrine\ORM\EntityManager $e
     }
 
     try {
+        //push data into database
         $entityManager->persist($post);
         $entityManager->flush();
 
+        //redirect to created post(question)
         header("location:/post.php?slug={$post->getSlug()}");
     } catch (\Exception $exception) {
-        die($exception->getMessage());
+        //TODO: NOTIFY USER ABOUT AN ERROR
     }
 }
 

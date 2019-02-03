@@ -35,29 +35,36 @@ $entityManager = (new Database())->getEntityManager();
 
 //try to find post
 $post = $entityManager->getRepository(Post::class)->findOneBy(['slug' => $slug]);
+
+//+1 view
 $post->setViews($post->getViews() + 1);
 
 try {
     //update views
     $entityManager->flush();
 
+    //check if post request
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         //check if logged in
         if (UserManager::getActiveUser() != null) {
             //get user object
             $user = $entityManager->getRepository(User::class)->getUserById(SessionManager::getVars()['user_id']);
+
+            //preparing comment(answer) before pushing into database
             $leaveCommentResponse = leaveComment($post, $user);
 
+            //check if comment(answer) has been successfuly prepared to be pushed
             if($leaveCommentResponse['success'] == true){
+                //push comment(answer) into database
+                $entityManager->flush();
+                //refresh page
                 header("Refresh:0");
             }
         }
-
-        //update post
-        $entityManager->flush();
     }
 
 } catch (\Exception $exception) {
+    //TODO: NOTIFY USER ABOUT AN ERROR
 }
 
 //check if something has been found if not throw 404 page

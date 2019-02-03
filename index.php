@@ -14,6 +14,7 @@ use App\Helper\Template;
 
 include "vendor/autoload.php";
 
+//get doctrine entity manager
 $entityManager = (new Database())->getEntityManager();
 
 //get all posts

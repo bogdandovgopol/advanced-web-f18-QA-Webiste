@@ -17,14 +17,16 @@ include "vendor/autoload.php";
 //start session
 SessionManager::initSession();
 
+//check if user is already logged in
 if (UserManager::getActiveUser()) {
+    //redirect to homepage
     header("location:/");
 }
 
 
-//handle POST request
+//check if post request
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    //handle POST variables
+    //get POST variables
     $email = $_POST['email'];
     $password = $_POST['password'];
 
@@ -34,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //check if signin was successful
     if ($response['success'] == true) {
         SessionManager::setVars(['user_id' => $response['user_id']]);
-        //redirect user to home page
+        //redirect user to the home page
         header('Location: ' . $_SERVER['HTTP_REFERER']);
     }
 

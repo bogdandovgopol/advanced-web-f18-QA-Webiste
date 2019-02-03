@@ -17,7 +17,9 @@ include "vendor/autoload.php";
 //start session
 SessionManager::initSession();
 
+//check if user is already logged in
 if (UserManager::getActiveUser()) {
+    //redirect to the homepage
     header("location:/");
 }
 
@@ -37,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //check if signup was successful
     if ($response['success'] == true) {
         //signup is successful
-        //create session variables for user
+        //create session variables for user_id
         SessionManager::setVars(['user_id' => $response['user_id']]);
         //redirect user to home page
         header("location:/");

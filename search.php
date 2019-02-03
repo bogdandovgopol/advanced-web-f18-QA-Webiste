@@ -20,14 +20,15 @@ if (isset($_GET['query'])) {
     $query = $_GET['query'];
 
 } else {
+    //show 404 error page
     return new NotFoundHttpException();
 }
 
 
-//access entitymanager
+//access doctrine's entity manager
 $entityManager = (new Database())->getEntityManager();
 
-//try to find post
+//try to find post by query
 $posts = $entityManager->getRepository(Post::class)->findBySearchQuery($query);
 
 
