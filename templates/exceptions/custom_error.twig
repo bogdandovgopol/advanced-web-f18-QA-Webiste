@@ -1,6 +1,6 @@
 {% extends 'base.twig' %}
 
-{% block title %}404{% endblock %}
+{% block title %}{{ code }}{% endblock %}
 {% block head %}
     <meta name="robots" content="noindex, nofollow"/>
 {% endblock %}
@@ -13,7 +13,7 @@
                     <h1>
                         Oops!</h1>
                     <h2>
-                        404 Not Found</h2>
+                        Error {{ code }}</h2>
                     <div class="error-details">
                         {{ message }}
                     </div>

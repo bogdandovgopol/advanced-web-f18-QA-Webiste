@@ -17,7 +17,6 @@ use App\Helper\Template;
 use App\Helper\Validator;
 use App\Managers\SessionManager;
 use App\Managers\UserManager;
-use Doctrine\ORM\EntityManager;
 
 include "vendor/autoload.php";
 
@@ -35,6 +34,10 @@ $entityManager = (new Database())->getEntityManager();
 
 //try to find post
 $post = $entityManager->getRepository(Post::class)->findOneBy(['slug' => $slug]);
+
+//check if something has been found if not throw 404 page
+if (!$post)
+    return new NotFoundHttpException();
 
 //+1 view
 $post->setViews($post->getViews() + 1);
@@ -66,10 +69,6 @@ try {
 } catch (\Exception $exception) {
     //TODO: NOTIFY USER ABOUT AN ERROR
 }
-
-//check if something has been found if not throw 404 page
-if (!$post)
-    return new NotFoundHttpException();
 
 
 function leaveComment(Post $post, User $user)

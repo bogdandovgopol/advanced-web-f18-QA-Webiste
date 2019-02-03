@@ -16,6 +16,9 @@ use App\Helper\Exception\NotFoundHttpException;
 use App\Helper\Template;
 use App\Managers\SessionManager;
 use App\Managers\UserManager;
+use App\Repository\TagRepository;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManager;
 
 include "vendor/autoload.php";
 
@@ -43,6 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $body = $_POST['content'];
     $selectedTags = $_POST['tags'];
 
+    //TODO: VALIDATE QUESTION
+
     //pushing data into database
     insertPost($title, $body, $selectedTags, $entityManager, $tagRepository, $userRepository);
 
@@ -56,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
  * @param $tagRepository
  * @param $userRepository
  */
-function insertPost($title, $body, $selectedTags, \Doctrine\ORM\EntityManager $entityManager, $tagRepository, $userRepository): void
+function insertPost($title, $body, $selectedTags, EntityManager $entityManager, TagRepository $tagRepository, UserRepository $userRepository): void
 {
 //insert post into db
     $post = new Post();

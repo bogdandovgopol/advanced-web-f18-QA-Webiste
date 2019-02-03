@@ -65,3 +65,7 @@ a:focus {
     font-size: 12px;
     padding-left: 15px;
 }
+
+.error-template {padding: 40px 15px;}
+.error-actions {margin-top:15px;margin-bottom:15px;}
+.error-actions .btn { margin-right:10px; }
