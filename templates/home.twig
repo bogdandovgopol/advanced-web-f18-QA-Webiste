@@ -13,8 +13,7 @@
             {% for post in posts %}
                 <div class="row question">
                     <div class="d-none d-sm-block col-lg-1 col-md-2 align-self-center">
-                        <img class="img-fluid rounded-circle" src="{{ post.author.avatar }}"
-                             alt="{{ post.user.fullName }}">
+                        <img class="img-fluid rounded-circle" src="{{ post.author.avatar | default('https://ui-avatars.com/api/?size=150&name=' ~ post.author.firstName ~ '%20' ~ post.author.lastName) }}" alt="{{ post.user.fullName }}">
                     </div>
                     <div class="col-lg-10 col-md-9">
                         <a href="post.php?slug={{ post.slug }}">

@@ -20,7 +20,7 @@ class Validator
         }
 
         if (strlen($name) < 5) {
-            array_push($errors, 'Cannot shorter than 5 characters');
+            array_push($errors, 'Cannot be shorter than 5 characters');
         }
 
         $result = [];
@@ -37,10 +37,10 @@ class Validator
     {
         $errors = [];
         if (strlen($password) < 6) {
-            array_push($errors, 'minimum 6 characters');
+            array_push($errors, 'Minimum 6 characters');
         }
         if (ctype_alnum($password)) {
-            array_push($errors, 'need to contain a symbol');
+            array_push($errors, 'Need to contain a symbol');
         }
         $result = [];
         if (count($errors) > 0) {
@@ -56,7 +56,7 @@ class Validator
     {
         $errors = [];
         if (filter_var($email, FILTER_VALIDATE_EMAIL) == false) {
-            array_push($errors, 'invalid email address');
+            array_push($errors, 'Invalid email address');
         }
         $result = [];
         if (count($errors) > 0) {
@@ -109,7 +109,7 @@ class Validator
         }
 
         if (strlen($name) < 20) {
-            array_push($errors, 'Cannot shorter than 20 characters');
+            array_push($errors, 'Cannot be shorter than 20 characters');
         }
 
         $result = [];

@@ -101,8 +101,6 @@ class UserManager
             if ($avatar['size'] != 0) {
                 $uploadedFilePath = self::uploadAvatar('avatar');
                 $user->setAvatar($uploadedFilePath);
-            } else {
-                $user->setAvatar('public/images/avatars/default.jpg');
             }
 
             try {
