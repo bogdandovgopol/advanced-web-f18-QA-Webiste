@@ -50,6 +50,20 @@ class Post
     private $body;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $views;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $answered = false;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -80,7 +94,7 @@ class Post
      * @var Tag[]|ArrayCollection
      *
      * Many Users have Many Groups.
-     * @ORM\ManyToMany(targetEntity="Tag", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Tag")
      * @ORM\JoinTable(name="posts_tags",
      *      joinColumns={@ORM\JoinColumn(name="post_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
@@ -142,7 +156,7 @@ class Post
 
     public function setTitle(string $title): void
     {
-        $this->title = $title;
+        $this->title = strip_tags($title);
     }
 
     public function getSlug(): ?string
@@ -164,6 +178,26 @@ class Post
     public function setBody(string $body): void
     {
         $this->body = $body;
+    }
+
+    public function getViews(): ?int
+    {
+        return $this->views;
+    }
+
+    public function setViews(int $views): void
+    {
+        $this->views = $views;
+    }
+
+    public function isAnswered(): ?bool
+    {
+        return $this->answered;
+    }
+
+    public function setAnswered(bool $answered): void
+    {
+        $this->answered = $answered;
     }
 
     public function getPublishedAt(): ?\DateTime

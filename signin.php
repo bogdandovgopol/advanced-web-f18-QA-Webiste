@@ -17,6 +17,10 @@ include "vendor/autoload.php";
 //start session
 SessionManager::initSession();
 
+if (UserManager::getActiveUser()) {
+    header("location:/");
+}
+
 
 //handle POST request
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -31,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($response['success'] == true) {
         SessionManager::setVars(['user_id' => $response['user_id']]);
         //redirect user to home page
-        header("location:/");
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
     }
 
 }

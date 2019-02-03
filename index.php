@@ -17,6 +17,6 @@ include "vendor/autoload.php";
 $entityManager = (new Database())->getEntityManager();
 
 //get all posts
-$posts = $entityManager->getRepository(Post::class)->findAll();
+$posts = $entityManager->getRepository(Post::class)->findBy([], ['publishedAt' => 'DESC']);
 
 return new Template('home', ['posts' => $posts]);

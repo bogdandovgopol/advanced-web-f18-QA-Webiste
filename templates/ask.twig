@@ -3,66 +3,94 @@
 {% block title %}Ask a question{% endblock %}
 {% block description %}Ask a question{% endblock %}
 
+{% block head %}
+    <script src='//cloud.tinymce.com/stable/tinymce.min.js'></script>
+    <script>
+        tinymce.init({
+            selector: '#content',
+            force_br_newlines: false,
+            force_p_newlines: false,
+            forced_root_block: '',
+            height : "400",
+
+            plugins: "codesample advlist autolink link image",
+            codesample_languages: [
+                {text: 'HTML/XML', value: 'markup'},
+                {text: 'JavaScript', value: 'javascript'},
+                {text: 'CSS', value: 'css'},
+                {text: 'PHP', value: 'php'},
+                {text: 'Ruby', value: 'ruby'},
+                {text: 'Python', value: 'python'},
+                {text: 'Java', value: 'java'},
+                {text: 'C', value: 'c'},
+                {text: 'C#', value: 'csharp'},
+                {text: 'C++', value: 'cpp'},
+                {text: 'Swift', value: 'swift'},
+                {text: 'Django', value: 'django'},
+                {text: 'Kotlin', value: 'kotlin'},
+                {text: 'Objective-C', value: 'objective-c'},
+            ],
+            toolbar: "codesample bold, italic, underline advlist autolink link image",
+            menubar: "tools"
+        });
+    </script>
+{% endblock %}
+{% block breadcrumb %}
+    <nav class="breadcrumb-bg" aria-label="breadcrumb">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Ask a question</li>
+            </ol>
+        </div>
+    </nav>
+{% endblock %}
 {% block body %}
 
-    <div class="container-fluid">
-        <div class="row">
-            <form method="post" action="ask.php" id="sign-up" class="col-md-4 offset-md-4" novalidate>
-                <h3 class="text-center my-4">Ask a question</h3>
-                <div class="form-group">
-                    <label for="username">Title</label>
-
-                    {#{% if response.user %}#}
-                    {#{% set email = response.emmail %}#}
-                    {#{% endif %}#}
-
-                    <input type="text" name="title" class="form-control" id="title" placeholder="title" required value="{{ username }}">
-                </div>
-
-                <div class="form-group">
-                    <label for="content">Text</label>
-
-                    {#{% if response.user %}#}
-                    {#{% set content = response.content %}#}
-                    {#{% endif %}#}
-
-                    <textarea id="content" name="content" class="form-control">{{ content }}</textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="tags">Tags</label>
-
-                    {#{% if response.user %}#}
-                    {#{% set content = response.content %}#}
-                    {#{% endif %}#}
-
-                    <select multiple name="tags[]" id="tags" class="form-control" data-live-search="true" data-size="5">
-                        {% for tag in tags %}
-                            <option value="{{ tag.id }}">{{ tag.name }}</option>
-                        {% endfor %}
-                    </select>
-
-                </div>
-
-
-                {% if response.error %}
-                    <div class="feeback text-danger">
-                        {{ response.error }}<br/>
+    <div class="container">
+        <form method="post" action="ask.php" id="sign-up" class="col-md-8 offset-md-2 mt-5">
+            <div class="jumbotron">
+                <h3 class="text-center">Ask a question</h3>
+                <div class="form-content mt-5">
+                    {% if response.error %}
+                        <div class="feeback text-danger">
+                            {{ response.error }}<br/>
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="username">Title</label>
+                        <input type="text" name="title" class="form-control" id="title"
+                               placeholder="Your question goes here. Be specific." required minlength="6">
                     </div>
-                {% endif %}
 
-                <div class="my-2 text-center">
-                    <button class="btn btn-primary" type="submit">Submit a question</button>
+                    <div class="form-group">
+                        <label for="content">Body</label>
+                        <textarea id="content" name="content" class="form-control" minlength="20"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tags">Tags</label>
+                        <select multiple name="tags[]" id="tags" class="form-control" data-live-search="true"
+                                data-size="5">
+                            {% for tag in tags %}
+                                <option value="{{ tag.id }}">{{ tag.name }}</option>
+                            {% endfor %}
+                        </select>
+
+                    </div>
+                    <div class="mt-5 text-center">
+                        <button class="btn btn-primary" type="submit">Post your question</button>
+                    </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 
 {% endblock %}
-{% block javascript %}
+{% block js %}
     {{ parent() }}
     <script>
-        $(function() {
+        $(function () {
             $('#tags').selectpicker();
         });
     </script>

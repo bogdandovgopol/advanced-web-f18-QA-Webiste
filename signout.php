@@ -8,10 +8,14 @@
 
 namespace App;
 
-use App\Helper\SessionManager;
+
+use App\Managers\SessionManager;
+use App\Managers\UserManager;
 
 include "vendor/autoload.php";
 
-//start session
-SessionManager::destroy();
-header("location:/");
+if (UserManager::getActiveUser()) {
+    //destroy session
+    SessionManager::destroy();
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+}

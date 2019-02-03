@@ -14,14 +14,19 @@ use Doctrine\ORM\EntityRepository;
 
 class PostRepository extends EntityRepository
 {
-    public function getPostsByTagId(int $tagId)
+    public function getPostsByTagName(string $tagName)
     {
         $queryBuilder = $this->createQueryBuilder('p');
         $queryBuilder->leftJoin('p.tags', 'tag');
-        $queryBuilder->where('tag.id = :tagID');
-        $queryBuilder->setParameter('tagID', $tagId);
+        $queryBuilder->where('tag.name = :tagName');
+        $queryBuilder->setParameter('tagName', $tagName);
 
         return $queryBuilder->getQuery()->getResult();
+
+    }
+
+    public function leaveComment()
+    {
 
     }
 

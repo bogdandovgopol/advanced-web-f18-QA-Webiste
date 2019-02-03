@@ -2,40 +2,48 @@
 
 {% block title %}Sign In{% endblock %}
 {% block description %}Sign In{% endblock %}
-
+{% block breadcrumb %}
+    <nav class="breadcrumb-bg" aria-label="breadcrumb">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Sign In</li>
+            </ol>
+        </div>
+    </nav>
+{% endblock %}
 {% block body %}
 
-    <div class="container-fluid">
-        <div class="row">
-            <form method="post" action="signin.php" id="sign-up" class="col-md-4 offset-md-4" novalidate>
-                <h3 class="text-center my-4">Sign in to your account</h3>
-                <div class="form-group">
-                    <label for="username">Username or Email</label>
-
-                    {% if response.user %}
-                        {% set email = response.emmail %}
+    <div class="container">
+        <form method="post" action="signin.php" id="sign-up" class="col-md-6 offset-md-3 mt-5">
+            <div class="jumbotron">
+                <h3 class="text-center">Sign in to your account</h3>
+                <div class="form-content mt-5">
+                    {% if response.error %}
+                        <div class="feeback text-danger text-center">
+                            {{ response.error }}<br/>
+                        </div>
                     {% endif %}
-
-                    <input type="text" name="email" class="form-control" id="email" placeholder="email" required value="{{email}}">
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" class="form-control" id="password" placeholder="your password" required>
-                </div>
-
-                {% if response.error %}
-                    <div class="feeback text-danger">
-                        {{response.error}}<br/>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" name="email" class="form-control" id="email" placeholder="Your e-mail"
+                               required/>
                     </div>
-                {% endif %}
 
-                <div class="my-2 text-center">
-                    <button class="btn btn-primary" type="submit">Sign In</button>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" class="form-control" id="password"
+                               placeholder="Your password" required>
+                    </div>
+
+                    <div class="text-center">
+                        <button class="btn btn-primary" type="submit">Sign In</button>
+                    </div>
+                    <div class="text-center mt-3">Don't have an account? <a href="signup.php">Sign up</a></div>
                 </div>
-                <p class="text-center">Don't have an account? <a href="signup.php">Sign up</a></p>
-            </form>
-        </div>
+            </div>
+        </form>
+
     </div>
 
 {% endblock %}

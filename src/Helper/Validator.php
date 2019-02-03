@@ -66,4 +66,36 @@ class Validator
         }
         return $result;
     }
+
+    public static function image($file, string $targetDir = 'public/images/avatars/')
+    {
+        $errors = [];
+
+        $fileName = uniqid() . '-' . basename($file["name"]);
+        $targetFile = $targetDir . $fileName;
+        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+        // Check if file already exists
+        if (file_exists($targetFile)) {
+            array_push($errors, 'Sorry, file already exists.');
+        }
+        // Check file size
+        if ($file["size"] > 500000) {
+            array_push($errors, 'Sorry, your file is too large.');
+        }
+        // Allow certain file formats
+        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+            array_push($errors, 'Sorry, only JPG, JPEG, PNG files are allowed.');
+        }
+
+        $result = [];
+        if (count($errors) > 0) {
+            $result['success'] = false;
+            $result['errors'] = $errors;
+        } else {
+            $result['success'] = true;
+        }
+        return $result;
+
+    }
 }

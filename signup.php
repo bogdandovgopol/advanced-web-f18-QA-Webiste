@@ -17,6 +17,10 @@ include "vendor/autoload.php";
 //start session
 SessionManager::initSession();
 
+if (UserManager::getActiveUser()) {
+    header("location:/");
+}
+
 
 //handle POST request
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -25,9 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $lastName = $_POST['lastName'];
     $email = $_POST['email'];
     $password = $_POST['password'];
+    $avatar = $_FILES['avatar'];
 
     //sign up
-    $response = UserManager::signUp($firstName, $lastName, $email, $password);
+    $response = UserManager::signUp($firstName, $lastName, $email, $password, $avatar);
 
     //check if signup was successful
     if ($response['success'] == true) {
@@ -38,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("location:/");
     }
 }
-
 
 return new Template('signup', ['response' => $response]);
 

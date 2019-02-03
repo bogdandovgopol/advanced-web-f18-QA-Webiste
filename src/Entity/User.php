@@ -33,6 +33,14 @@ class User
      * @ORM\Column(type="string")
      *
      */
+    private $avatar;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     *
+     */
     private $firstName;
 
     /**
@@ -96,7 +104,6 @@ class User
         $this->createdAt = new \DateTime();
 
         $this->lastIp = isset($_SERVER['HTTP_CLIENT_IP']) ? $_SERVER['HTTP_CLIENT_IP'] : isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
-        $this->hash = uniqid();
         $this->isActive = true;
         $this->isAdmin = false;
 
@@ -107,6 +114,16 @@ class User
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getAvatar(): string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(string $avatar): void
+    {
+        $this->avatar = $avatar;
     }
 
     public function getFirstName(): string
@@ -127,6 +144,11 @@ class User
     public function setLastName(string $lastName): void
     {
         $this->lastName = $lastName;
+    }
+
+    public function getFullName(): string
+    {
+        return "{$this->firstName} {$this->lastName}";
     }
 
     public function getEmail(): string

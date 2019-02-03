@@ -22,7 +22,7 @@ include "vendor/autoload.php";
 $activeUser = UserManager::getActiveUser();
 
 if ($activeUser == null) {
-    header("location:/");
+    header("location:/signin.php");
 }
 
 //access entitymanager

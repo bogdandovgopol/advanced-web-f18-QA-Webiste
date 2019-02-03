@@ -37,6 +37,14 @@ class Comment
      * @ORM\Column(type="text")
      */
     private $content;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $answer = false;
+
     /**
      * @var \DateTime
      *
@@ -70,6 +78,22 @@ class Comment
     {
         $this->content = $content;
     }
+
+
+    public function isAnswer(): bool
+    {
+        return $this->answer;
+    }
+
+    /**
+     * @param bool $answer
+     */
+    public function setAnswer(bool $answer): void
+    {
+        $this->answer = $answer;
+    }
+
+
 
     public function getPublishedAt(): \DateTime
     {

@@ -2,84 +2,102 @@
 
 {% block title %}Sign Up{% endblock %}
 {% block description %}Sign Up{% endblock %}
-
+{% block breadcrumb %}
+    <nav class="breadcrumb-bg" aria-label="breadcrumb">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Sign Up</li>
+            </ol>
+        </div>
+    </nav>
+{% endblock %}
 {% block body %}
 
-    <div class="container-fluid">
-        <div class="row">
+    <div class="container">
 
-            {% if response.errors.db %}
-                <div class="feedback text-danger">
-                    {% for err in response.errors.db %}
-                        {{err}}<br/>
-                    {% endfor %}
-                </div>
-            {% endif %}
+        {% if response.errors.db %}
+            <div class="feedback text-danger">
+                {% for err in response.errors.db %}
+                    {{ err }}<br/>
+                {% endfor %}
+            </div>
+        {% endif %}
 
-            <form method="post" action="signup.php" id="sign-up" class="col-md-4 offset-md-4" novalidate>
-                <h3 class="text-center my-4">Sign up for an account</h3>
-                <div class="form-group">
-                    <label for="username">First Name</label>
-                    <input type="text" name="firstName" class="form-control" id="firstName" placeholder="minimum 6 characters" required>
-                    <div class="invalid-feedback">
-                        Minimum 6 alphanumeric characters and cannot contain spaces
+        <form method="post" action="signup.php" id="sign-up" class="col-md-6 offset-md-3 mt-5"
+              enctype="multipart/form-data">
+            <div class="jumbotron">
+                <h3 class="text-center">Sign up for an account</h3>
+                <div class="form-content mt-5">
+                    <div class="form-group">
+                        <label for="username">First Name</label>
+                        <input type="text" name="firstName" class="form-control" id="firstName"
+                               placeholder="Your first name" required>
+                        {% if response.errors.firstName %}
+                            <div class="feedback text-danger">
+                                {% for err in response.errors.firstName %}
+                                    {{ err }}<br/>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
-                    {% if response.errors.fullName %}
-                        <div class="feedback text-danger">
-                            {% for err in response.errors.fullName %}
-                                {{err}}<br/>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    <label for="username">Last Name</label>
-                    <input type="text" name="lastName" class="form-control" id="lastName" placeholder="minimum 6 characters" required>
-                    <div class="invalid-feedback">
-                        Minimum 6 alphanumeric characters and cannot contain spaces
+                    <div class="form-group">
+                        <label for="username">Last Name</label>
+                        <input type="text" name="lastName" class="form-control" id="lastName"
+                               placeholder="Your last name"
+                               required>
+                        {% if response.errors.lastName %}
+                            <div class="feedback text-danger">
+                                {% for err in response.errors.lastName %}
+                                    {{ err }}<br/>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
-                    {% if response.errors.fullName %}
-                        <div class="feedback text-danger">
-                            {% for err in response.errors.fullName %}
-                                {{err}}<br/>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" name="email" class="form-control" id="email" placeholder="alex@example.com" required>
-                    <div class="invalid-feedback">
-                        Please enter a valid email address
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" name="email" class="form-control" id="email"
+                               placeholder="Your e-mail address"
+                               required>
+                        {% if response.errors.email %}
+                            <div class="feedback text-danger">
+                                {% for err in response.errors.email %}
+                                    {{ err }}<br/>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
-                    {% if response.errors.email %}
-                        <div class="feedback text-danger">
-                            {% for err in response.errors.email %}
-                                {{err}}<br/>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" class="form-control" id="password" placeholder="minimum 8 characters" required>
-                    <div class="invalid-feedback">
-                        Minimum 8 characters
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" class="form-control" id="password"
+                               placeholder="Your password" minlength="6" required>
+                        {% if response.errors.password %}
+                            <div class="feedback text-danger">
+                                {% for err in response.errors.password %}
+                                    {{ err }}<br/>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
-                    {% if response.errors.password %}
-                        <div class="feedback text-danger">
-                            {% for err in response.errors.password %}
-                                {{err}}<br/>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+
+                    <div class="form-group">
+                        <label for="avatar">Avatar</label>
+                        <input type="file" name="avatar" class="form-control-file" id="avatar">
+                        {% if response.errors.avatar %}
+                            <div class="feedback text-danger">
+                                {% for err in response.errors.avatar %}
+                                    {{ err }}<br/>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-primary" type="submit">Sign up</button>
+                    </div>
+                    <div class="mt-3 text-center">Already have an account? <a href="signin.php">Sign in</a></div>
                 </div>
-                <div class="my-2 text-center">
-                    <button class="btn btn-primary" type="submit">Sign up</button>
-                </div>
-                <p class="text-center">Already have an account? <a href="signin.php">Sign in</a></p>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 
 {% endblock %}

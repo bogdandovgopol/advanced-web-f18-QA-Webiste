@@ -2,17 +2,43 @@
 
 {% block title %}Questions{% endblock %}
 {% block description %}Questions{% endblock %}
-
+{% block breadcrumb %}
+    <nav class="breadcrumb-bg" aria-label="breadcrumb">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Questions</li>
+            </ol>
+        </div>
+    </nav>
+{% endblock %}
 {% block body %}
 
-    {% for post in posts %}
-        <div class="col-md-12">
-            <h2><a href="./post.php?slug={{ post.slug }}">{{ post.title }}</a></h2>
-            Tags:
-            {% for tag in post.tags %}
-                {{ tag.name }},
+    <div class="container">
+        <h1 class="title mt-5">All Questions</h1>
+        <hr/>
+        <div class="feed mt-5">
+            {% for post in posts %}
+                <div class="row question">
+                    <div class="d-none d-sm-block col-lg-1 col-md-2 align-self-center">
+                        <img class="img-fluid rounded-circle" src="{{ post.author.avatar }}"
+                             alt="{{ post.user.fullName }}">
+                    </div>
+                    <div class="col-lg-10 col-md-9">
+                        <a href="post.php?slug={{ post.slug }}">
+                            <h2>{% if post.isAnswered %}[Answered]{% endif %} {{ post.title }}</h2>
+                        </a>
+                        <span class="tags">
+                        {% for tag in post.tags %}
+                            <a href="tag.php?name={{ tag.name }}"><span class="tag">{{ tag.name }}</span></a>
+                        {% endfor %}
+                    </span>
+                        <span class="view-count">Views: {{ post.views }}x</span>
+                        <span class="view-count {% if post.isAnswered %}text-success{% endif %}">Answers: {{ post.comments.count }}</span>
+                    </div>
+                </div>
+                <hr/>
             {% endfor %}
         </div>
-    {% endfor %}
-
+    </div>
 {% endblock %}

@@ -34,7 +34,7 @@ class UserManager
         return $user;
     }
 
-    public static function signUp($firstName, $lastName, $email, $password): array
+    public static function signUp($firstName, $lastName, $email, $password, $avatar): array
     {
         // array to store errors
         $errors = [];
@@ -52,16 +52,25 @@ class UserManager
         }
 
         //validate email
-        $validemail = Validator::email($email);
-        if ($validemail['success'] == false) {
-            $errors['email'] = $validemail['errors'];
+        $validEmail = Validator::email($email);
+        if ($validEmail['success'] == false) {
+            $errors['email'] = $validEmail['errors'];
         }
 
         //validate password
-        $validpassword = Validator::password($password);
-        if ($validpassword['success'] == false) {
-            $errors['password'] = $validpassword['errors'];
+        $validPassword = Validator::password($password);
+        if ($validPassword['success'] == false) {
+            $errors['password'] = $validPassword['errors'];
         }
+
+        //validate image if not empty since not required
+        if ($avatar['size'] != 0) {
+            $validImage = Validator::image($avatar);
+            if ($validImage['success'] == false) {
+                $errors['avatar'] = $validImage['errors'];
+            }
+        }
+
 
         //array for result
         $response = [];
@@ -87,6 +96,14 @@ class UserManager
             //get hash from the password
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
             $user->setPassword($passwordHash);
+
+            //upload image if not empty since not required
+            if ($avatar['size'] != 0) {
+                $uploadedFilePath = self::uploadAvatar('avatar');
+                $user->setAvatar($uploadedFilePath);
+            } else {
+                $user->setAvatar('public/images/avatars/default.jpg');
+            }
 
             try {
                 $entityManager->persist($user);
@@ -145,5 +162,19 @@ class UserManager
             }
         }
         return $response;
+    }
+
+    public static function uploadAvatar(string $name, string $targetDir = 'public/images/avatars/')
+    {
+
+        $fileName = uniqid() . '-' . basename($_FILES[$name]["name"]);
+        $targetFile = $targetDir . $fileName;
+
+        if (move_uploaded_file($_FILES[$name]["tmp_name"], $targetFile)) {
+            return $targetFile;
+        } else {
+            return null;
+        }
+
     }
 }
