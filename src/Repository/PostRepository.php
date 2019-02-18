@@ -39,11 +39,6 @@ class PostRepository extends EntityRepository
 
     }
 
-    public function leaveComment()
-    {
-
-    }
-
 
     //SEARCH:
 
