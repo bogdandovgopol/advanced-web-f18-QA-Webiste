@@ -108,8 +108,8 @@ class Validator
             array_push($errors, 'Cannot be empty');
         }
 
-        if (strlen($name) < 20) {
-            array_push($errors, 'Cannot be shorter than 20 characters');
+        if (strlen($name) < 30) {
+            array_push($errors, 'Cannot be shorter than 30 characters');
         }
 
         $result = [];

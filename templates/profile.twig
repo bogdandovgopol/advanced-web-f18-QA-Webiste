@@ -5,10 +5,128 @@
 
 
 {% block body %}
-{{ user.firstName }}<br />
-    {{ user.lastName }}<br />
+    <div class="container">
+        <h1 class="title align-self-center"><img
+                    src="{{ user.avatar | default('https://ui-avatars.com/api/?size=150&name=' ~ user.fullName) }}" width="150px"
+                    class="img-fluid rounded-circle"> {{ user.fullName }}</h1>
+        <hr/>
+        <div class="row">
+            <div class="col-lg-3 pb-sm-5">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link profile-tab" id="v-pills-home-tab" data-toggle="pill" href="#dashboard"
+                       role="tab" aria-controls="v-pills-dashboard" aria-selected="true">Dashboard</a>
+                    {% if activeUser.id == user.id %}
+                        <a class="nav-link profile-tab" id="v-pills-profile-tab" data-toggle="pill" href="#profile"
+                           role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a>
+                        <a class="nav-link profile-tab" id="v-pills-messages-tab" href="signout.php"
+                           aria-selected="false">Sign Out</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="dashboard" role="tabpanel"
+                         aria-labelledby="dashboard-tab">
+                        <div class="col-12">
+                            <h2>Questions ({{ user.posts.count | default(0) }})</h2>
+                            <hr class="pb-3"/>
+                            {% for post in user.posts %}
+                                <div class="row question">
+                                    <div class="col-lg-10 col-md-9">
+                                        <a href="post.php?slug={{ post.slug }}">
+                                            <h4>{% if post.isAnswered %}<span class="text-success">[Answered]</span>{% endif %} {{ post.title }}</h4>
+                                        </a>
+                                        <span class="tags">
+                                            {% for tag in post.tags %}
+                                                <a href="tag.php?name={{ tag.name }}"><span
+                                                            class="tag">{{ tag.name }}</span></a>
+                                            {% endfor %}
+                                        </span>
+                                        <span class="view-count">Views: {{ post.views }}x</span>
+                                        <span class="view-count {% if post.isAnswered %}text-success{% endif %}">Answers: {{ post.comments.count }}</span>
+                                    </div>
+                                </div>
+                                <hr/>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% if activeUser.id == user.id %}
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 
-    <img src="/public/images/avatars/{{ user.avatar }}" class="img-thumbnail">
+                            <div class="form-content mt-5">
+                                <form method="post" id="profile-edit" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label for="firstName">First Name</label>
+                                        <input type="text" name="firstName" class="form-control" id="firstName"
+                                               value="{{ user.firstName }}">
+                                        {% if response.errors.firstName %}
+                                            <div class="feedback text-danger">
+                                                {% for err in response.errors.firstName %}
+                                                    {{ err }}<br/>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username">Last Name</label>
+                                        <input type="text" name="lastName" class="form-control" id="lastName"
+                                               value="{{ user.lastName }}">
+                                        {% if response.errors.lastName %}
+                                            <div class="feedback text-danger">
+                                                {% for err in response.errors.lastName %}
+                                                    {{ err }}<br/>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email Address</label>
+                                        <input type="email" name="email" class="form-control" id="email"
+                                               value="{{ user.email }}">
+                                        {% if response.errors.email %}
+                                            <div class="feedback text-danger">
+                                                {% for err in response.errors.email %}
+                                                    {{ err }}<br/>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">Password</label>
+                                        <input type="password" name="password" class="form-control" id="password"
+                                               placeholder="Your password" minlength="6">
+                                        {% if response.errors.password %}
+                                            <div class="feedback text-danger">
+                                                {% for err in response.errors.password %}
+                                                    {{ err }}<br/>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="avatar">Avatar</label>
+                                        <input type="file" name="avatar" class="form-control-file" id="avatar">
+                                        {% if response.errors.avatar %}
+                                            <div class="feedback text-danger">
+                                                {% for err in response.errors.avatar %}
+                                                    {{ err }}<br/>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="text-center">
+                                        <button class="btn btn-primary" type="submit">Edit Profile</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 

@@ -1,10 +1,10 @@
 {% extends 'base.twig' %}
 
-{% block title %}{% if post.isAnswered %}[Answered]{% endif %} {{ post.title }}{% endblock %}
-{% block description %}{% if post.isAnswered %}[Answered]{% endif %} {{ post.body | striptags }}{% endblock %}
+{% block title %}{% if post.isAnswered %}<span class="text-success">[Answered]</span>{% endif %} {{ post.title }}{% endblock %}
+{% block description %}{% if post.isAnswered %}<span class="text-success">[Answered]</span>{% endif %} {{ post.body | striptags }}{% endblock %}
 {% block head %}
     <link rel="stylesheet" href="public/css/prism.css">
-    <script src='//cloud.tinymce.com/stable/tinymce.min.js'></script>
+    <script src='//cloud.tinymce.com/stable/tinymce.min.js?apiKey=u8durb3bwswuvwz2ud58hhjincuxh2h3zv37zah5k4vyyamo'></script>
     <script>
         tinymce.init({
             selector: '#textarea',
@@ -13,6 +13,7 @@
             forced_root_block: '',
             height: 250,
             // entity_encoding: "raw",
+            content_css: "public/css/tinymce.css",
 
             plugins: "codesample advlist autolink link image",
             codesample_languages: [
@@ -31,6 +32,8 @@
                 {text: 'Kotlin', value: 'kotlin'},
                 {text: 'Objective-C', value: 'objective-c'},
             ],
+            toolbar: "codesample bold, italic, underline advlist autolink link image",
+            menubar: "tools"
         });
     </script>
 {% endblock %}
@@ -46,13 +49,18 @@
     </nav>
 {% endblock %}
 {% block body %}
-    <div class="container pt-5">
+    <div class="container">
         <div class="row mt-5 question">
             <div class="d-none d-sm-block col-lg-1 col-md-2 align-self-center">
-                <img class="img-fluid rounded-circle" src="{{ post.author.avatar | default('https://ui-avatars.com/api/?size=150&name=' ~ post.author.firstName ~ '%20' ~ post.author.lastName) }}" alt="{{ post.user.fullName }}">
+                <a href="profile.php?id={{ post.author.id }}">
+                    <img class="img-fluid rounded-circle"
+                         src="{{ post.author.avatar | default('https://ui-avatars.com/api/?size=150&name=' ~ post.author.fullName) }}"
+                         alt="{{ post.author.fullName }}">
+                </a>
+
             </div>
             <div class="col-lg-10 col-md-9">
-                <h1>{% if post.isAnswered %}[Answered]{% endif %} {{ post.title }}</h1>
+                <h1>{% if post.isAnswered %}<span class="text-success">[Answered]</span>{% endif %} {{ post.title }}</h1>
                 <span class="tags">
                 {% for tag in post.tags %}
                     <a href="tag.php?name={{ tag.name }}"><span class="tag">{{ tag.name }}</span></a>
@@ -65,17 +73,21 @@
             </div>
         </div>
         <hr class="mt-5 pb-5"/>
-
+        <form method="post" class="">
         {% if post.comments is not empty %}
             <h4 class="mt-5 mb-5">Answers({{ (post.comments | length) | default(0) }}):</h4>
 
             {% for comment in post.comments %}
-                <div class="row comment {% if comment.isAnswer %}bg-success{% endif %}">
-                    <div class="d-none d-sm-block col-lg-1 col-md-2 align-self-start">
-                        <img class="img-fluid rounded-circle" src="{{ comment.author.avatar }}"
-                             alt="{{ comment.user.fullName }}">
-                    </div>
+                <div class="row comment {% if comment.isAnswer %}answered{% endif %}">
+                    <div class="d-none d-sm-block col-lg-1 col-md-2 align-self-start text-center">
+                        <a href="profile.php?id={{ comment.author.id }}"><img class="img-fluid rounded-circle" src="{{ comment.author.avatar | default('https://ui-avatars.com/api/?size=150&name=' ~ comment.author.fullName) }}" alt="{{ comment.author.fullName }}"></a>
 
+                        {% if post.author.id == activeUser.id and post.isAnswered == false %}
+                            <button type="submit" name="acceptAnswer" class="accept-answer mt-lg-5 mr-lg-5" value="{{ comment.id }}">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        {% endif %}
+                    </div>
                     <div class="col-lg-10 col-md-9">
                         <strong>{{ comment.author.firstName }} | {{ comment.publishedAt | date('d.m.Y H:i') }}</strong>
                         <hr/>
@@ -89,10 +101,10 @@
 
         <h4 class="mt-5">Your answer:</h4>
 
-        {% if user %}
-            <form method="post" class="">
+        {% if activeUser %}
+
                 <div class="form-group">
-                    <textarea id="textarea" class="form-control" name="comment" minlength="20"></textarea>
+                    <textarea id="textarea" class="form-control" name="comment" minlength="30"></textarea>
                     {% if response.errors.comment %}
                         <div class="feedback text-danger">
                             {% for err in response.errors.comment %}
@@ -103,12 +115,12 @@
                     <div id="wmd-preview" class="wmd-panel wmd-preview"></div>
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-outline-success" type="submit">Submit you answer</button>
+                    <button class="btn btn-primary" name="submitAnswer" type="submit">Submit you answer</button>
                 </div>
-            </form>
         {% else %}
             <a href="signin.php" class="bnt btn-lg btn-primary">You need to sign in to post answers</a>
         {% endif %}
+        </form>
     </div>
 
 {% endblock %}

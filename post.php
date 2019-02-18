@@ -39,25 +39,23 @@ $post = $entityManager->getRepository(Post::class)->findOneBy(['slug' => $slug])
 if (!$post)
     return new NotFoundHttpException();
 
+//get user object
+$user = $entityManager->getRepository(User::class)->getUserById(SessionManager::getVars()['user_id']);
+
 //+1 view
 $post->setViews($post->getViews() + 1);
 
 try {
-    //update views
-    $entityManager->flush();
-
-    //check if post request
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    //check if submitAnswer POST button is clicked
+    if (isset($_POST['submitAnswer'])) {
         //check if logged in
         if (UserManager::getActiveUser() != null) {
-            //get user object
-            $user = $entityManager->getRepository(User::class)->getUserById(SessionManager::getVars()['user_id']);
 
             //preparing comment(answer) before pushing into database
             $leaveCommentResponse = leaveComment($post, $user);
 
             //check if comment(answer) has been successfuly prepared to be pushed
-            if($leaveCommentResponse['success'] == true){
+            if ($leaveCommentResponse['success'] == true) {
                 //push comment(answer) into database
                 $entityManager->flush();
                 //refresh page
@@ -65,9 +63,30 @@ try {
             }
         }
     }
+    //check if acceptAnswer POST button is clicked
+    if (isset($_POST['acceptAnswer'])) {
+        $commentID = $_POST['acceptAnswer'];
+
+
+
+        //find comment based on ID
+        $comment = $entityManager->getRepository(Comment::class)->find($commentID);
+
+        $post->setAnswered(true);
+        $comment->setAnswer(true);
+
+
+        header("Refresh:0");
+
+    }
+
+
+
+    //update views
+    $entityManager->flush();
 
 } catch (\Exception $exception) {
-    //TODO: NOTIFY USER ABOUT AN ERROR
+    return new NotFoundHttpException();
 }
 
 

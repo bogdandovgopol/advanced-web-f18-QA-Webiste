@@ -46,7 +46,7 @@ class UserManager
         }
 
         //validate last name
-        $validName = Validator::name($firstName);
+        $validName = Validator::name($lastName);
         if ($validName['success'] == false) {
             $errors['lastName'] = $validName['errors'];
         }
@@ -139,7 +139,7 @@ class UserManager
         $response = [];
 
         //check if user has been found
-        if ($user == false) {
+        if ($user == null) {
             //account does not exist
             $response['success'] = false;
             $response['user'] = $user;
@@ -162,6 +162,108 @@ class UserManager
         return $response;
     }
 
+    public static function editProfile(User $user, $firstName, $lastName, $email, $password, $avatar): array
+    {
+        // array to store errors
+        $errors = [];
+
+        //validate first name
+        if ($firstName != null) {
+            $validName = Validator::name($firstName);
+            if ($validName['success'] == false) {
+                $errors['firstName'] = $validName['errors'];
+            }
+        }
+
+        //validate last name
+        if ($lastName != null) {
+            $validName = Validator::name($lastName);
+            if ($validName['success'] == false) {
+                $errors['lastName'] = $validName['errors'];
+            }
+        }
+
+        //validate email
+        if ($email != null) {
+            $validEmail = Validator::email($email);
+            if ($validEmail['success'] == false) {
+                $errors['email'] = $validEmail['errors'];
+            }
+        }
+
+        //validate password
+        if ($password != null) {
+            $validPassword = Validator::password($password);
+            if ($validPassword['success'] == false) {
+                $errors['password'] = $validPassword['errors'];
+            }
+        }
+
+        //validate image if not empty since not required
+        if ($avatar != null) {
+            if ($avatar['size'] != 0) {
+                $validImage = Validator::image($avatar);
+                if ($validImage['success'] == false) {
+                    $errors['avatar'] = $validImage['errors'];
+                }
+            }
+        }
+
+
+        //array for result
+        $response = [];
+
+        //check if there are errors
+        if (count($errors) > 0) {
+            //signup not successful
+            $response['success'] = false;
+            $response['errors'] = $errors;
+            return $response;
+        } else {
+            //no errors
+            //add user to our database
+
+            //get entitymanager
+            $entityManager = (new Database())->getEntityManager();
+
+            $user->setFirstName($firstName);
+            $user->setLastName($lastName);
+            $user->setEmail($email);
+
+            //get hash from the password
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+            $user->setPassword($passwordHash);
+
+            //upload image if not empty since not required
+            if ($avatar['size'] != 0) {
+                $uploadedFilePath = self::uploadAvatar('avatar');
+                $user->setAvatar($uploadedFilePath);
+
+            }
+
+            try {
+                $entityManager->merge($user);
+                $entityManager->flush();
+
+                $response['email'] = $email;
+                $response['user_id'] = $user->getId();
+                $response['success'] = true;
+
+                return $response;
+
+            } catch (UniqueConstraintViolationException $exception) {
+                $response['errors']['email'] = 'Email already exists';
+
+                return $response;
+            } catch (\Exception $exception) {
+                $response['errors']['db'] = 'User cannot be added.';
+
+                return $response;
+            }
+
+        }
+    }
+
     public static function uploadAvatar(string $name, string $targetDir = 'public/images/avatars/')
     {
 
@@ -170,8 +272,6 @@ class UserManager
 
         if (move_uploaded_file($_FILES[$name]["tmp_name"], $targetFile)) {
             return $targetFile;
-        } else {
-            return null;
         }
 
     }

@@ -6,30 +6,44 @@
 {% block body %}
 
     <div class="container">
-        <h1 class="title mt-5">Latest questions</h1>
-        <hr/>
-
-        <div class="feed mt-5">
-            {% for post in posts %}
-                <div class="row question">
-                    <div class="d-none d-sm-block col-lg-1 col-md-2 align-self-center">
-                        <img class="img-fluid rounded-circle" src="{{ post.author.avatar | default('https://ui-avatars.com/api/?size=150&name=' ~ post.author.firstName ~ '%20' ~ post.author.lastName) }}" alt="{{ post.user.fullName }}">
-                    </div>
-                    <div class="col-lg-10 col-md-9">
-                        <a href="post.php?slug={{ post.slug }}">
-                            <h2>{% if post.isAnswered %}[Answered]{% endif %} {{ post.title }}</h2>
-                        </a>
-                        <span class="tags">
+        <div class="row">
+            <div class="col-lg-3 pb-sm-5">
+                <h1 class="title">Categories</h1>
+                <hr/>
+                <div class="mt-5 nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link profile-tab" id="v-pills-messages-tab" href="questions.php?category=1" aria-selected="false">Programming</a>
+                    <a class="nav-link profile-tab" id="v-pills-messages-tab" href="questions.php?category=2" aria-selected="false">Design</a>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <h1 class="title">Latest activity</h1>
+                <hr/>
+                <div class="feed mt-5">
+                    {% for post in posts %}
+                        <div class="row question">
+                            <div class="d-none d-sm-block col-lg-1 col-md-2 align-self-center">
+                                <a href="profile.php?id={{ post.author.id }}"><img class="img-fluid rounded-circle"
+                                                                                   src="{{ post.author.avatar | default('https://ui-avatars.com/api/?size=150&name=' ~ post.author.fullName) }}"
+                                                                                   alt="{{ post.author.fullName }}"></a>
+                            </div>
+                            <div class="col-lg-10 col-md-9">
+                                <a href="post.php?slug={{ post.slug }}">
+                                    <h2>{% if post.isAnswered %}<span
+                                                class="text-success">[Answered]</span>{% endif %} {{ post.title }}</h2>
+                                </a>
+                                <span class="tags">
                         {% for tag in post.tags %}
                             <a href="tag.php?name={{ tag.name }}"><span class="tag">{{ tag.name }}</span></a>
                         {% endfor %}
                         </span>
-                        <span class="view-count">Views: {{ post.views }}x</span>
-                        <span class="view-count {% if post.isAnswered %}text-success{% endif %}">Answers: {{ post.comments.count }}</span>
-                    </div>
+                                <span class="view-count">Views: {{ post.views }}x</span>
+                                <span class="view-count {% if post.isAnswered %}text-success{% endif %}">Answers: {{ post.comments.count }}</span>
+                            </div>
+                        </div>
+                        <hr/>
+                    {% endfor %}
                 </div>
-                <hr/>
-            {% endfor %}
+            </div>
         </div>
     </div>
 

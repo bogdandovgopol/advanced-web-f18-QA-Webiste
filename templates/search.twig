@@ -14,18 +14,20 @@
 {% endblock %}
 {% block body %}
     <div class="container">
-        <h1 class="title mt-5">Search results for: "{{ query }}"</h1>
+        <h1 class="title">Search results for: "{{ query }}"</h1>
         <hr/>
 
         <div class="feed mt-5">
             {% for post in posts %}
                 <div class="row question">
                     <div class="d-none d-sm-block col-lg-1 col-md-2 align-self-center">
-                        <img class="img-fluid rounded-circle" src="{{ post.author.avatar | default('https://ui-avatars.com/api/?size=150&name=' ~ post.author.firstName ~ '%20' ~ post.author.lastName) }}" alt="{{ post.user.fullName }}">
+                        <a href="profile.php?id={{ post.author.id }}"><img class="img-fluid rounded-circle"
+                                                                           src="{{ post.author.avatar | default('https://ui-avatars.com/api/?size=150&name=' ~ post.author.fullName) }}"
+                                                                           alt="{{ post.author.fullName }}"></a>
                     </div>
                     <div class="col-lg-10 col-md-9">
                         <a href="post.php?slug={{ post.slug }}">
-                            <h2>{% if post.isAnswered %}[Answered]{% endif %} {{ post.title }}</h2>
+                            <h2>{% if post.isAnswered %}<span class="text-success">[Answered]</span>{% endif %} {{ post.title }}</h2>
                         </a>
                         <span class="tags">
                         {% for tag in post.tags %}

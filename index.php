@@ -11,11 +11,13 @@ namespace App;
 use App\Entity\Post;
 use App\Helper\Database;
 use App\Helper\Template;
+use App\Managers\UserManager;
 
 include "vendor/autoload.php";
 
 //get doctrine entity manager
 $entityManager = (new Database())->getEntityManager();
+
 
 //get all posts
 $posts = $entityManager->getRepository(Post::class)->findBy([], ['publishedAt' => 'DESC']);

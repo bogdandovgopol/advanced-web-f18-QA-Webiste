@@ -30,7 +30,7 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      *
      */
     private $avatar;
@@ -94,7 +94,7 @@ class User
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="Post", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Post", mappedBy="author")
      */
     private $posts;
 
@@ -116,7 +116,7 @@ class User
         return $this->id;
     }
 
-    public function getAvatar(): string
+    public function getAvatar(): ?string
     {
         return $this->avatar;
     }

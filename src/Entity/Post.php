@@ -86,7 +86,7 @@ class Post
      *      orphanRemoval=true,
      *      cascade={"persist"}
      * )
-     * @ORM\OrderBy({"publishedAt": "DESC"})
+     * @ORM\OrderBy({"answer": "DESC", "publishedAt": "DESC"})
      */
     private $comments;
 
@@ -99,6 +99,7 @@ class Post
      *      joinColumns={@ORM\JoinColumn(name="post_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
      *      )
+     *
      */
     private $tags;
 

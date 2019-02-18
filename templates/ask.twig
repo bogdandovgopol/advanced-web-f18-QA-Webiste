@@ -4,7 +4,7 @@
 {% block description %}Ask a question{% endblock %}
 
 {% block head %}
-    <script src='//cloud.tinymce.com/stable/tinymce.min.js'></script>
+    <script src='//cloud.tinymce.com/stable/tinymce.min.js?apiKey=u8durb3bwswuvwz2ud58hhjincuxh2h3zv37zah5k4vyyamo'></script>
     <script>
         tinymce.init({
             selector: '#content',
@@ -12,6 +12,7 @@
             force_p_newlines: false,
             forced_root_block: '',
             height : "400",
+            content_css: "public/css/tinymce.css",
 
             plugins: "codesample advlist autolink link image",
             codesample_languages: [
@@ -78,7 +79,7 @@
                         </select>
 
                     </div>
-                    <div class="mt-5 text-center">
+                    <div class="mt-5">
                         <button class="btn btn-primary" type="submit">Post your question</button>
                     </div>
                 </div>

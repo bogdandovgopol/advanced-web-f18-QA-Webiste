@@ -25,6 +25,20 @@ class PostRepository extends EntityRepository
 
     }
 
+    public function getPostsByTagCategory(?int $category)
+    {
+        $queryBuilder = $this->createQueryBuilder('p');
+        $queryBuilder->leftJoin('p.tags', 'tag');
+        if ($category != null) {
+            $queryBuilder->where('tag.category = :category');
+            $queryBuilder->setParameter('category', $category);
+        }
+        $queryBuilder->orderBy('p.id', 'DESC');
+
+        return $queryBuilder->getQuery()->getResult();
+
+    }
+
     public function leaveComment()
     {
 

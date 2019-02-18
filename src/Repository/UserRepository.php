@@ -43,7 +43,7 @@ class UserRepository extends EntityRepository
         try {
             return $queryBuilder->getQuery()->getSingleResult();
         } catch (\Exception $exception) {
-            return false;
+            return null;
         }
 
     }

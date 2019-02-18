@@ -22,7 +22,7 @@ class UserTwigExtension extends \Twig_Extension implements \Twig_Extension_Globa
     {
 
         return [
-            'user' => UserManager::getActiveUser()
+            'activeUser' => UserManager::getActiveUser()
         ];
     }
 }

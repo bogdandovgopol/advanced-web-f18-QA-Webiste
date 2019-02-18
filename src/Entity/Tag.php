@@ -34,6 +34,16 @@ class Tag
      */
     private $name;
 
+    /**
+     * @var integer
+     *
+     * 1 = programming
+     * 2 = design
+     *
+     * @ORM\Column(type="integer")
+     */
+    private $category;
+
 
     #### GETTERS AND SETTERS ####
 
@@ -49,13 +59,22 @@ class Tag
 
     public function getName(): ?string
     {
-        //slugify string. example: Adobe Photoshop => adobe-photoshop
         return $this->name;
     }
 
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getCategory(): ?int
+    {
+        return $this->category;
+    }
+
+    public function setCategory(int $category): void
+    {
+        $this->category = $category;
     }
 
 }
